@@ -6,14 +6,14 @@ export async function fetchMapPrayers() {
         // Only fetch prayers that have geohashes
         // Usually, you'd do a prefix match on geohash here for a specific viewport
         // but for the global map overview, we'll fetch recently geocoded prayers
-        const prayersSnapshot = await adminDb.collection("prayers")
+        const prayersSnapshot = await (adminDb.collection("prayers") as any)
             .orderBy("createdAt", "desc")
             .limit(500)
             .get();
 
         const markers: { id: string, geohash: string, lat: number, lon: number, text: string }[] = [];
 
-        prayersSnapshot.docs.forEach(doc => {
+        prayersSnapshot.docs.forEach((doc: any) => {
             const data = doc.data();
             if (data.geohash && data.jitteredCoords) {
                 markers.push({
