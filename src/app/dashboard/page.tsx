@@ -46,18 +46,14 @@ export default async function DashboardPage() {
                     <div className="bg-blue-50 text-blue-900 border border-blue-200 p-4 rounded-xl text-center mb-4">
                         <span className="font-mono text-2xl font-bold tracking-[0.2em]">{recoveryCode || "N/A"}</span>
                     </div>
-                    <div className="text-center">
-                        <Link href="/register" className="text-sm font-medium text-blue-600 hover:text-blue-800 border border-blue-200 rounded-lg px-4 py-2 hover:bg-blue-50 transition-colors">
-                            Upgrade to Permanent Profile
-                        </Link>
-                    </div>
+
                 </section>
 
                 <div className="grid md:grid-cols-2 gap-8">
                     <section className="space-y-4">
-                        <h2 className="text-xl font-bold text-gray-900 border-b pb-2">Your Prayers</h2>
+                        <h2 className="text-xl font-bold text-gray-900 border-b pb-2">Your Prayer Requests</h2>
                         {submittedPrayers.length === 0 ? (
-                            <p className="text-sm text-gray-500 italic">No prayers submitted yet.</p>
+                            <p className="text-sm text-gray-500 italic">No prayer requests submitted yet.</p>
                         ) : (
                             <div className="space-y-4">
                                 {submittedPrayers.map((p) => (
@@ -74,7 +70,7 @@ export default async function DashboardPage() {
                     </section>
 
                     <section className="space-y-4">
-                        <h2 className="text-xl font-bold text-gray-900 border-b pb-2">Prayers You Followed</h2>
+                        <h2 className="text-xl font-bold text-gray-900 border-b pb-2">Prayer Requests You Followed</h2>
                         {intercededPrayers.length === 0 ? (
                             <p className="text-sm text-gray-500 italic">You haven't interceded for any requests yet.</p>
                         ) : (
