@@ -16,14 +16,19 @@ export async function getOrCreateRecoveryCode() {
     try {
         const userDoc = await adminDb.collection("users").doc(uuid).get();
         if (userDoc.exists) {
+            // Refresh the last-seen timestamp on every dashboard visit
+            await adminDb.collection("users").doc(uuid).update({
+                lastSeenAt: new Date(),
+            });
             return userDoc.data()?.recoveryCode;
         }
 
-        // Create a new recovery code
+        // Create a new user stub with a recovery code
         const recoveryCode = nanoid();
         await adminDb.collection("users").doc(uuid).set({
             recoveryCode,
             createdAt: new Date(),
+            lastSeenAt: new Date(),
         });
         return recoveryCode;
     } catch (error) {
