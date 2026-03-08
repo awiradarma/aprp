@@ -17,11 +17,11 @@ export interface DiscoverPage {
 
 const PAGE_SIZE = 20;
 
-export async function fetchDiscoverPrayers(cursorIso?: string): Promise<DiscoverPage> {
+export async function fetchDiscoverPrayers(cursorIso?: string, limit: number = PAGE_SIZE): Promise<DiscoverPage> {
     try {
         let query = (adminDb.collection("prayers") as any)
             .orderBy("createdAt", "desc")
-            .limit(PAGE_SIZE + 1); // fetch one extra to detect if there's a next page
+            .limit(limit + 1); // fetch one extra to detect if there's a next page
 
         if (cursorIso) {
             query = query.startAfter(new Date(cursorIso));

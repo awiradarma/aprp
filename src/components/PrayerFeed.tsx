@@ -4,7 +4,7 @@ import { fetchDiscoverPrayers, type DiscoverPrayer } from "@/app/actions/discove
 import Link from "next/link";
 import type { T } from "@/lib/i18n";
 
-function timeAgo(iso: string, t: T["discover"]): string {
+export function timeAgo(iso: string, t: T["discover"]): string {
     const seconds = Math.floor((Date.now() - new Date(iso).getTime()) / 1000);
     if (seconds < 60) return t.justNow;
     const minutes = Math.floor(seconds / 60);
@@ -14,7 +14,7 @@ function timeAgo(iso: string, t: T["discover"]): string {
     return t.dAgo.replace("{n}", String(Math.floor(hours / 24)));
 }
 
-function PrayerCard({ prayer, t }: { prayer: DiscoverPrayer; t: T }) {
+export function PrayerCard({ prayer, t }: { prayer: DiscoverPrayer; t: T }) {
     return (
         <Link href={`/p/${prayer.id}`}
             className="block bg-white rounded-2xl shadow-sm border border-gray-100 p-5 hover:shadow-md hover:border-blue-200 transition-all duration-200 group">
