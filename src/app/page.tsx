@@ -22,7 +22,6 @@ export default async function Home() {
           <div className="flex justify-center gap-4 bg-blue-50 border-b border-blue-100 py-2 px-4 text-sm flex-wrap">
             <Link href="/discover" className="text-blue-700 font-semibold hover:underline">{t.nav.discover}</Link>
             <Link href="/dashboard" className="text-blue-700 font-semibold hover:underline">{t.nav.myPrayers}</Link>
-            <Link href="/recover" className="text-blue-700 font-semibold hover:underline">{t.nav.restoreSession}</Link>
             <Link href="/faq" className="text-gray-500 hover:text-blue-700 font-semibold hover:underline">{t.nav.privacyFaq}</Link>
           </div>
 

@@ -35,6 +35,7 @@ export default async function FAQPage() {
                         <Link href="/" className="hover:text-blue-600 transition-colors">{t.appName}</Link>
                         <Link href="/discover" className="hover:text-blue-600 transition-colors">{t.nav.discover}</Link>
                         <Link href="/dashboard" className="hover:text-blue-600 transition-colors">{t.nav.myPrayers}</Link>
+                        <Link href="/recover" className="hover:text-blue-600 transition-colors">{t.nav.restoreSession}</Link>
                     </div>
                 </footer>
             </main>
