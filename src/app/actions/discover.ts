@@ -10,14 +10,29 @@ export interface DiscoverPrayer {
     createdAt: string; // ISO string
 }
 
-export async function fetchDiscoverPrayers(limit = 50): Promise<DiscoverPrayer[]> {
-    try {
-        const snapshot = await (adminDb.collection("prayers") as any)
-            .orderBy("createdAt", "desc")
-            .limit(limit)
-            .get();
+export interface DiscoverPage {
+    prayers: DiscoverPrayer[];
+    nextCursor: string | null; // ISO string of last prayer's createdAt, or null if no more
+}
 
-        return snapshot.docs.map((doc: any) => {
+const PAGE_SIZE = 20;
+
+export async function fetchDiscoverPrayers(cursorIso?: string): Promise<DiscoverPage> {
+    try {
+        let query = (adminDb.collection("prayers") as any)
+            .orderBy("createdAt", "desc")
+            .limit(PAGE_SIZE + 1); // fetch one extra to detect if there's a next page
+
+        if (cursorIso) {
+            query = query.startAfter(new Date(cursorIso));
+        }
+
+        const snapshot = await query.get();
+        const docs = snapshot.docs as any[];
+        const hasMore = docs.length > PAGE_SIZE;
+        const pageDocs = hasMore ? docs.slice(0, PAGE_SIZE) : docs;
+
+        const prayers: DiscoverPrayer[] = pageDocs.map((doc: any) => {
             const data = doc.data();
             return {
                 id: doc.id,
@@ -25,14 +40,17 @@ export async function fetchDiscoverPrayers(limit = 50): Promise<DiscoverPrayer[]
                 prayedCount: data.prayedCount ?? 0,
                 locationString: data.locationString ?? null,
                 geohash: data.geohash ?? null,
-                // Firestore Timestamp → ISO string; plain Date also handled
                 createdAt: data.createdAt?.toDate
                     ? data.createdAt.toDate().toISOString()
                     : new Date(data.createdAt).toISOString(),
             };
         });
+
+        const nextCursor = hasMore ? prayers[prayers.length - 1].createdAt : null;
+
+        return { prayers, nextCursor };
     } catch (error) {
         console.error("Error fetching discover prayers:", error);
-        return [];
+        return { prayers: [], nextCursor: null };
     }
 }

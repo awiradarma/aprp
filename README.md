@@ -153,7 +153,8 @@ node scripts/cleanup-inactive-users.js --days 180
 | 🌐 **Multi-language UI** | react-i18next + AI-powered request translation |
 | 🗺️ **Marker clustering** | Cluster overlapping map dots for clarity at low zoom |
 | 🔐 **Real email/password auth** | Firebase Auth login page to replace the stub registration |
-| 📖 **Scripture recommendations** | AI-suggested Bible verses based on prayer sentiment |
+| � **Search & Filters** | Search by keyword, filter by topic tag or geolocation proximity |
+| �📖 **Scripture recommendations** | AI-suggested Bible verses based on prayer sentiment |
 | 🛡️ **Content moderation** | Shadow-ban via AWS Bedrock Guardrails or GCP NLP API |
 | 🚨 **Crisis detection** | NLP to flag self-harm markers and surface resources |
 | 🎖️ **Prayer streaks** | Gamification to encourage consistent intercession |
