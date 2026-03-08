@@ -18,7 +18,10 @@ export default async function DiscoverPage() {
                     </div>
                     <div className="flex gap-3">
                         <Link href="/dashboard" className="text-sm text-gray-600 hover:text-blue-600 font-medium">
-                            Dashboard
+                            My Prayers
+                        </Link>
+                        <Link href="/faq" className="text-sm text-gray-400 hover:text-blue-600 font-medium">
+                            Privacy & FAQ
                         </Link>
                         <Link
                             href="/"

@@ -31,17 +31,18 @@ export default async function DashboardPage() {
         <div className="min-h-screen bg-gray-50 flex flex-col items-center py-10 px-4">
             <main className="w-full max-w-4xl space-y-8">
                 <header className="flex justify-between items-center text-center">
-                    <h1 className="text-3xl font-bold text-gray-900">Your Dashboard</h1>
+                    <h1 className="text-3xl font-bold text-gray-900">My Prayers</h1>
                     <div className="flex gap-3">
                         <Link href="/discover" className="text-blue-600 hover:text-blue-800 font-medium text-sm">🌍 Discover</Link>
                         <Link href="/" className="text-blue-600 hover:text-blue-800 font-medium text-sm">New Request</Link>
+                        <Link href="/faq" className="text-gray-400 hover:text-blue-600 font-medium text-sm">Privacy & FAQ</Link>
                     </div>
                 </header>
 
                 <section className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
-                    <h2 className="text-lg font-semibold text-gray-800 mb-2">Anonymous Recovery Code</h2>
+                    <h2 className="text-lg font-semibold text-gray-800 mb-2">🔑 Your Prayer Key</h2>
                     <p className="text-sm text-gray-600 mb-4">
-                        Save this 12-character code. You can use it to restore your profile (prayers and intercessions) on another device.
+                        This is your only connection to your prayers — like a key to an anonymous journal. Save it somewhere safe. If you ever switch devices or clear your browser, enter this key to restore your prayers. <Link href="/faq" className="text-blue-600 hover:underline">Learn how anonymity works →</Link>
                     </p>
                     <div className="bg-blue-50 text-blue-900 border border-blue-200 p-4 rounded-xl text-center mb-4">
                         <span className="font-mono text-2xl font-bold tracking-[0.2em]">{recoveryCode || "N/A"}</span>

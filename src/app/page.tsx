@@ -15,8 +15,9 @@ export default function Home() {
           </div>
           <div className="flex justify-center gap-4 bg-blue-50 border-b border-blue-100 py-2 px-4 text-sm flex-wrap">
             <Link href="/discover" className="text-blue-700 font-semibold hover:underline">🌍 Discover</Link>
-            <Link href="/dashboard" className="text-blue-700 font-semibold hover:underline">📋 Dashboard</Link>
+            <Link href="/dashboard" className="text-blue-700 font-semibold hover:underline">📹 My Prayers</Link>
             <Link href="/recover" className="text-blue-700 font-semibold hover:underline">🔑 Restore Session</Link>
+            <Link href="/faq" className="text-gray-500 hover:text-blue-700 font-semibold hover:underline">🔒 Privacy & FAQ</Link>
           </div>
 
           <div className="p-6">

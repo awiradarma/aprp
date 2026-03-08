@@ -6,15 +6,15 @@ export default function RecoverPage() {
         <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
             <main className="w-full max-w-sm bg-white rounded-2xl shadow-xl overflow-hidden">
                 <div className="bg-blue-600 p-6 text-center">
-                    <h1 className="text-xl font-bold text-white mb-2">Recover Session</h1>
-                    <p className="text-blue-100 text-sm">Enter your 12-character alphanumeric code to restore your profile.</p>
+                    <h1 className="text-xl font-bold text-white mb-2">🔑 Restore Your Session</h1>
+                    <p className="text-blue-100 text-sm">Enter your Prayer Key to pick up right where you left off — on any device.</p>
                 </div>
 
                 <div className="p-6">
                     <form action={recoverSessionAction} className="space-y-4">
                         <div>
                             <label htmlFor="recoveryCode" className="block text-sm font-medium text-gray-700 mb-1">
-                                Recovery Code
+                                Prayer Key
                             </label>
                             <input
                                 type="text"
@@ -35,10 +35,9 @@ export default function RecoverPage() {
                             Recover My Profile
                         </button>
 
-                        <div className="text-center mt-4 border-t pt-4">
-                            <Link href="/" className="text-sm text-blue-600 hover:underline">
-                                Back to Home
-                            </Link>
+                        <div className="text-center mt-4 border-t pt-4 space-y-2">
+                            <Link href="/" className="block text-sm text-blue-600 hover:underline">Back to Home</Link>
+                            <Link href="/faq" className="block text-xs text-gray-400 hover:text-blue-500">How does anonymity work?</Link>
                         </div>
                     </form>
                 </div>
