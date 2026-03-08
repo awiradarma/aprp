@@ -16,8 +16,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Anonymous Prayer Request",
-  description: "Share your prayer request anonymously with believers around the world.",
+  title: "Anonymous Prayer",
+  description: "Share your prayer — request, praise, or thanksgiving — anonymously with believers around the world.",
 };
 
 export default async function RootLayout({

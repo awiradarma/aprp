@@ -1,6 +1,6 @@
-# Anonymous Prayer Request (APRP)
+# Anonymous Prayer Platform(APRP)
 
-A serverless, privacy-first platform for sharing and interceding for prayer requests anonymously — with a live global map showing where believers around the world are praying.
+A serverless, privacy-first platform for sharing anonymous prayers — requests, praises, or thanksgivings — and interceding for one another, with a live global map showing where believers around the world are praying.
 
 ---
 
@@ -10,8 +10,8 @@ This is a personal ministry tool designed to connect believers across geographic
 
 - **Anonymity** — No account required. Identity is managed via secure session cookies and optional recovery codes.
 - **Privacy** — Exact locations are never stored. All geo-data is jittered (±0.01°) and snapped to a Level-6 Geohash before reaching the database.
-- **Presence** — A live global map visually shows where prayer is happening, reducing the sense of spiritual isolation for those who submit requests.
-- **Simplicity** — Submit a request in seconds. No sign-up, no friction.
+- **Presence** — A live global map visually shows where prayer is happening, reducing the sense of spiritual isolation for those who submit a prayer.
+- **Simplicity** — Submit a prayer in seconds. No sign-up, no friction.
 
 ---
 
@@ -32,21 +32,21 @@ This is a personal ministry tool designed to connect believers across geographic
 
 ### 🔐 Anonymous Identity (Phase 1)
 - A `stub_user_id` UUID is automatically generated and stored in a secure `HttpOnly` cookie on first visit — no sign-up needed
-- Every prayer request gets a unique `nanoid(16)` URL (e.g. `/p/M0f5gIENRmkJFdpR`) that can be shared
+- Every prayer gets a unique `nanoid(16)` URL (e.g. `/p/M0f5gIENRmkJFdpR`) that can be shared
 
 ### 🔑 Recovery & Intercession Tracking (Phase 2)
 - **Recovery Code** — a 12-character alphanumeric code shown on the Dashboard, exportable to restore a session on a new device via `/recover`
 - **"I Prayed" button** — any visitor can click to intercede; an atomic Firestore counter tracks the total
-- **Dashboard** — shows all prayer requests you submitted and all prayers you've interceded for
+- **Dashboard** — shows all prayers you submitted and all prayers you've interceded for
 - **Intercessor locations** — when clicking "I Prayed", users can optionally share their location (privacy-preserving) which appears as an amber marker on a mini-map on the prayer page
 
 ### 🌍 Discovery & Global Map (Phase 3)
-- **Global Map** on the homepage — live MapLibre map showing blue markers for every geolocated prayer request around the world
-- **Discover page** (`/discover`) — browsable list of all prayer requests with location tags, timestamps, and intercession counts
+- **Global Map** on the homepage — live MapLibre map showing blue markers for every geolocated prayer around the world
+- **Discover page** (`/discover`) — browsable list of all prayers with location tags, timestamps, and intercession counts
 - **Intercessor mini-map** — each prayer detail page shows a small world map with amber markers showing where intercessors prayed from
 
 ### ✏️ Prayer Management
-- **Edit prayer text** — owners can inline-edit their prayer request after submission
+- **Edit prayer** — owners can inline-edit their prayer after submission
 - **Mark as Answered** — owners can mark a prayer as answered; the header turns green and shows "🙌 Answered Prayer"
 - **Share button** — uses the native Web Share API on mobile; falls back to clipboard copy on desktop
 
@@ -59,7 +59,7 @@ src/
 ├── app/
 │   ├── layout.tsx              # Root layout: fonts, page title, metadata
 │   ├── page.tsx                # Homepage: prayer form + global map
-│   ├── discover/page.tsx       # Browse all prayer requests
+│   ├── discover/page.tsx       # Browse all prayers
 │   ├── dashboard/page.tsx      # User's personal prayer history
 │   ├── recover/page.tsx        # Restore session via recovery code
 │   ├── p/[id]/page.tsx         # Individual prayer detail page
@@ -150,7 +150,7 @@ node scripts/cleanup-inactive-users.js --days 180
 | Feature | Notes |
 |---|---|
 | 🔔 **Push Notifications (FCM)** | Notify users when someone prays for their request |
-| 🌐 **Multi-language UI** | react-i18next + AI-powered request translation |
+| 🌐 **Multi-language UI** | react-i18next + AI-powered prayer translation |
 | 🗺️ **Marker clustering** | Cluster overlapping map dots for clarity at low zoom |
 | 🔐 **Real email/password auth** | Firebase Auth login page to replace the stub registration |
 | � **Search & Filters** | Search by keyword, filter by topic tag or geolocation proximity |
