@@ -1,33 +1,23 @@
 "use client";
 import { useState } from "react";
+import type { T } from "@/lib/i18n";
 
-export default function ShareButton({ id }: { id: string }) {
+export default function ShareButton({ id, t }: { id: string; t: T }) {
     const [copied, setCopied] = useState(false);
 
     const handleShare = async () => {
         const url = `${window.location.origin}/p/${id}`;
-
-        // Use the native Web Share API if available (great on mobile)
         if (navigator.share) {
             try {
-                await navigator.share({
-                    title: "Prayer Request",
-                    text: "Join me in prayer for this request.",
-                    url,
-                });
+                await navigator.share({ title: t.prayer.prayerRequest, text: t.prayer.prayerRequest, url });
                 return;
-            } catch {
-                // User cancelled share dialog — fall through to clipboard copy
-            }
+            } catch { /* user cancelled */ }
         }
-
-        // Fallback: copy to clipboard
         try {
             await navigator.clipboard.writeText(url);
             setCopied(true);
             setTimeout(() => setCopied(false), 2500);
         } catch {
-            // Last resort: manual prompt
             window.prompt("Copy this link:", url);
         }
     };
@@ -37,7 +27,7 @@ export default function ShareButton({ id }: { id: string }) {
             onClick={handleShare}
             className="w-full bg-white border-2 border-blue-600 text-blue-600 hover:bg-blue-50 font-semibold py-3 px-4 rounded-lg transition-colors"
         >
-            {copied ? "✓ Link Copied!" : "Share this URL"}
+            {copied ? t.prayer.shareCopied : t.prayer.shareUrl}
         </button>
     );
 }
