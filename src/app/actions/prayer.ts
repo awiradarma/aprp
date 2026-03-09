@@ -55,6 +55,9 @@ export async function submitPrayerAction(formData: FormData) {
         }
     }
 
+    const visibility = (formData.get("visibility") as string) || "public";
+    // visibility: 'public' | 'unlisted' | 'private'
+
     // Generate a unique, cryptographically secure URL component for the prayer
     const prayerId = nanoid(16);
 
@@ -66,7 +69,8 @@ export async function submitPrayerAction(formData: FormData) {
             prayedCount: 0,
             locationString: locationStr || null,
             jitteredCoords,
-            geohash
+            geohash,
+            visibility
         });
     } catch (error) {
         console.error("Error saving prayer to Firestore:", error);

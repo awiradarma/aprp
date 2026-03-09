@@ -37,6 +37,23 @@ export default async function PrayerPage({ params }: { params: Promise<{ id: str
 
     const uuid = cookieStore.get("stub_user_id")?.value;
     const isOwner = !!(uuid && prayer.requesterId === uuid);
+
+    // Enforce private visibility
+    if (prayer.visibility === 'private' && !isOwner) {
+        return (
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+                <div className="bg-white p-8 rounded-3xl shadow-xl text-center max-w-md border border-gray-100">
+                    <div className="w-16 h-16 bg-red-50 text-red-600 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-6">🔒</div>
+                    <h2 className="text-gray-900 text-2xl font-black mb-3">{t.prayer.accessDenied}</h2>
+                    <p className="text-gray-500 font-medium leading-relaxed">{t.prayer.privateDeniedMessage}</p>
+                    <Link href="/" className="inline-block mt-8 text-blue-600 font-bold hover:underline">
+                        ← {t.recover.backHome.replace("Back to ", "")}
+                    </Link>
+                </div>
+            </div>
+        );
+    }
+
     const isAnswered = !!(prayer.answeredAt);
 
     let hasInterceded = false;
@@ -86,6 +103,12 @@ export default async function PrayerPage({ params }: { params: Promise<{ id: str
 
                             {/* Main Prayer Body */}
                             <div className="p-8 md:p-14 space-y-12">
+                                {isOwner && prayer.visibility === 'private' && (
+                                    <div className="bg-purple-50 text-purple-700 px-6 py-4 rounded-2xl text-sm font-bold flex items-center gap-3 border border-purple-100 shadow-sm">
+                                        <span>{t.prayer.privateNotice}</span>
+                                    </div>
+                                )}
+
                                 <div className={`p-10 md:p-14 rounded-[2rem] text-xl md:text-3xl font-medium italic leading-relaxed shadow-inner border relative overflow-hidden ${isAnswered ? "bg-green-50 text-green-900 border-green-100" : "bg-blue-50 text-blue-900 border-blue-100"}`}>
                                     {/* Quote decoration */}
                                     <span className="absolute -top-6 -left-2 text-9xl font-serif text-blue-500/10 pointer-events-none selecion-none">&ldquo;</span>
@@ -188,7 +211,7 @@ export default async function PrayerPage({ params }: { params: Promise<{ id: str
                         </div>
                     </aside>
                 </div>
-            </div>
-        </div>
+            </div >
+        </div >
     );
 }

@@ -58,12 +58,22 @@ export default async function DashboardPage() {
                             <p className="text-sm text-gray-500 italic">{t.dashboard.noRequests}</p>
                         ) : (
                             <div className="space-y-4">
-                                {submittedPrayers.map((p) => (
-                                    <div key={p.id} className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
-                                        <p className="text-gray-800 italic mb-3">&quot;{p.text}&quot;</p>
-                                        <div className="flex justify-between items-center text-xs">
-                                            <Link href={`/p/${p.id}`} className="text-blue-600 font-medium hover:underline">{t.dashboard.view}</Link>
-                                            <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full">{p.prayedCount || 0} {t.discover.praying.replace("{n}", "").trim()}</span>
+                                {submittedPrayers.map((p: any) => (
+                                    <div key={p.id} className="bg-white p-5 rounded-[1.5rem] shadow-sm border border-gray-100 space-y-4">
+                                        <p className="text-gray-800 italic leading-relaxed">&quot;{p.text.length > 100 ? p.text.slice(0, 100) + "..." : p.text}&quot;</p>
+                                        <div className="flex justify-between items-end">
+                                            <div className="flex items-center gap-2">
+                                                <Link href={`/p/${p.id}`} className="text-blue-600 font-bold hover:underline text-sm uppercase tracking-wider">{t.dashboard.view} →</Link>
+                                                {p.visibility && p.visibility !== 'public' && (
+                                                    <span className={`px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest ${p.visibility === 'private' ? 'bg-purple-50 text-purple-600 border border-purple-100' : 'bg-gray-50 text-gray-500 border border-gray-100'
+                                                        }`}>
+                                                        {p.visibility === 'private' ? t.home.visibilityPrivate : t.home.visibilityUnlisted}
+                                                    </span>
+                                                )}
+                                            </div>
+                                            <span className="bg-blue-50 text-blue-600 px-3 py-1 rounded-xl text-xs font-bold border border-blue-50">
+                                                🙏 {p.prayedCount || 0}
+                                            </span>
                                         </div>
                                     </div>
                                 ))}

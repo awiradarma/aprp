@@ -21,7 +21,7 @@ export async function fetchDiscoverPrayers(cursorIso?: string, limit: number = P
     try {
         let query = (adminDb.collection("prayers") as any)
             .orderBy("createdAt", "desc")
-            .limit(limit + 1); // fetch one extra to detect if there's a next page
+            .limit(limit * 2 + 1); // fetch more to account for filtered out private ones
 
         if (cursorIso) {
             query = query.startAfter(new Date(cursorIso));
@@ -29,8 +29,15 @@ export async function fetchDiscoverPrayers(cursorIso?: string, limit: number = P
 
         const snapshot = await query.get();
         const docs = snapshot.docs as any[];
-        const hasMore = docs.length > PAGE_SIZE;
-        const pageDocs = hasMore ? docs.slice(0, PAGE_SIZE) : docs;
+
+        // Filter in-memory to avoid Firestore index requirement for equality + orderBy
+        let filteredDocs = docs.filter((doc: any) => {
+            const data = doc.data();
+            return !data.visibility || data.visibility === 'public';
+        });
+
+        const hasMore = filteredDocs.length > limit;
+        const pageDocs = hasMore ? filteredDocs.slice(0, limit) : filteredDocs;
 
         const prayers: DiscoverPrayer[] = pageDocs.map((doc: any) => {
             const data = doc.data();

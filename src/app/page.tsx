@@ -60,6 +60,29 @@ export default async function Home() {
                   <p className="text-xs text-gray-500 mt-1">{t.home.locationPrivacy}</p>
                 </div>
 
+                <div className="pt-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-3">
+                    {t.home.privacyLabel}
+                  </label>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <label className="relative flex flex-col p-3 border rounded-xl cursor-pointer hover:bg-blue-50 transition-colors has-[:checked]:bg-blue-50 has-[:checked]:border-blue-500 has-[:checked]:ring-1 has-[:checked]:ring-blue-500">
+                      <input type="radio" name="visibility" value="public" defaultChecked className="sr-only" />
+                      <span className="font-bold text-sm text-blue-900">{t.home.visibilityPublic}</span>
+                      <span className="text-[10px] text-blue-700/60 leading-tight mt-1">{t.home.visibilityPublicDesc}</span>
+                    </label>
+                    <label className="relative flex flex-col p-3 border rounded-xl cursor-pointer hover:bg-blue-50 transition-colors has-[:checked]:bg-blue-50 has-[:checked]:border-blue-500 has-[:checked]:ring-1 has-[:checked]:ring-blue-500">
+                      <input type="radio" name="visibility" value="unlisted" className="sr-only" />
+                      <span className="font-bold text-sm text-gray-900">{t.home.visibilityUnlisted}</span>
+                      <span className="text-[10px] text-gray-500/60 leading-tight mt-1">{t.home.visibilityUnlistedDesc}</span>
+                    </label>
+                    <label className="relative flex flex-col p-3 border rounded-xl cursor-pointer hover:bg-blue-50 transition-colors has-[:checked]:bg-blue-50 has-[:checked]:border-blue-500 has-[:checked]:ring-1 has-[:checked]:ring-blue-500">
+                      <input type="radio" name="visibility" value="private" className="sr-only" />
+                      <span className="font-bold text-sm text-purple-900">{t.home.visibilityPrivate}</span>
+                      <span className="text-[10px] text-purple-700/60 leading-tight mt-1">{t.home.visibilityPrivateDesc}</span>
+                    </label>
+                  </div>
+                </div>
+
                 <button
                   type="submit"
                   className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors shadow-sm"
