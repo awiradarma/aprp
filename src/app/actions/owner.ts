@@ -31,9 +31,10 @@ export async function markAnsweredAction(formData: FormData) {
 
 export async function editPrayerAction(formData: FormData) {
     const prayerId = formData.get("prayerId") as string;
-    const newText = (formData.get("text") as string)?.trim();
+    let newText = formData.get("text") as string;
 
-    if (!newText || newText.length < 5) throw new Error("Prayer text is too short.");
+    const { validatePrayerText } = await import("@/lib/validation");
+    newText = validatePrayerText(newText);
 
     await getOwnerOrThrow(prayerId);
 

@@ -1,4 +1,4 @@
-import { submitPrayerAction } from "./actions/prayer";
+import PrayerForm from "@/components/PrayerForm";
 import GlobalMap from "@/components/GlobalMap";
 import Link from "next/link";
 import { cookies } from "next/headers";
@@ -31,66 +31,7 @@ export default async function Home() {
             </div>
 
             <div className="p-6">
-              <form action={submitPrayerAction} className="space-y-4">
-                <div>
-                  <label htmlFor="prayerText" className="block text-sm font-medium text-gray-700 mb-1">
-                    {t.home.prayerLabel}
-                  </label>
-                  <textarea
-                    name="prayerText"
-                    id="prayerText"
-                    rows={5}
-                    required
-                    className="w-full bg-white text-gray-800 rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow resize-none"
-                    placeholder={t.home.prayerPlaceholder}
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="location" className="block text-sm font-medium text-gray-700 mb-1">
-                    {t.home.locationLabel}
-                  </label>
-                  <input
-                    type="text"
-                    name="location"
-                    id="location"
-                    className="w-full bg-white text-gray-800 rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
-                    placeholder={t.home.locationPlaceholder}
-                  />
-                  <p className="text-xs text-gray-500 mt-1">{t.home.locationPrivacy}</p>
-                </div>
-
-                <div className="pt-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-3">
-                    {t.home.privacyLabel}
-                  </label>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    <label className="relative flex flex-col p-3 border rounded-xl cursor-pointer hover:bg-blue-50 transition-colors has-[:checked]:bg-blue-50 has-[:checked]:border-blue-500 has-[:checked]:ring-1 has-[:checked]:ring-blue-500">
-                      <input type="radio" name="visibility" value="public" defaultChecked className="sr-only" />
-                      <span className="font-bold text-sm text-blue-900">{t.home.visibilityPublic}</span>
-                      <span className="text-[10px] text-blue-700/60 leading-tight mt-1">{t.home.visibilityPublicDesc}</span>
-                    </label>
-                    <label className="relative flex flex-col p-3 border rounded-xl cursor-pointer hover:bg-blue-50 transition-colors has-[:checked]:bg-blue-50 has-[:checked]:border-blue-500 has-[:checked]:ring-1 has-[:checked]:ring-blue-500">
-                      <input type="radio" name="visibility" value="unlisted" className="sr-only" />
-                      <span className="font-bold text-sm text-gray-900">{t.home.visibilityUnlisted}</span>
-                      <span className="text-[10px] text-gray-500/60 leading-tight mt-1">{t.home.visibilityUnlistedDesc}</span>
-                    </label>
-                    <label className="relative flex flex-col p-3 border rounded-xl cursor-pointer hover:bg-blue-50 transition-colors has-[:checked]:bg-blue-50 has-[:checked]:border-blue-500 has-[:checked]:ring-1 has-[:checked]:ring-blue-500">
-                      <input type="radio" name="visibility" value="private" className="sr-only" />
-                      <span className="font-bold text-sm text-purple-900">{t.home.visibilityPrivate}</span>
-                      <span className="text-[10px] text-purple-700/60 leading-tight mt-1">{t.home.visibilityPrivateDesc}</span>
-                    </label>
-                  </div>
-                </div>
-
-                <button
-                  type="submit"
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors shadow-sm"
-                >
-                  {t.home.submit}
-                </button>
-                <p className="text-xs text-gray-500 text-center mt-4">{t.home.anonNote}</p>
-              </form>
+              <PrayerForm t={t} />
             </div>
           </main>
 

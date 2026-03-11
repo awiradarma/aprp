@@ -47,8 +47,12 @@ Phase 4: Notifications and Multi-Language
 
 Phase 5: Automated Moderation (Shadow Ban)
 [ ] Integrate AWS Bedrock Guardrails or GCP Natural Language API for content filtering.
+[ ] Implement offensive content detection for all visibility levels (Public, Unlisted) to block or shadow-ban inappropriate requests.
 [ ] Implement "Shadow Ban" logic: flagged content is hidden from global discovery but remains visible to the requester.
 
+Phase 6: Support & Community
+[ ] Implement a support contact mechanism (contact form or dedicated support link).
+[ ] Update FAQ with "How to contact us" and comprehensive "Usage Guidelines" for the community.
 
 4. Agent Behavioral Rules (.agent/rules/*.md)
 The following constraints must be active for all agent interactions:
@@ -69,5 +73,7 @@ Scripture Engine: Contextual Bible verse recommendations based on request sentim
 Gamification: Prayer streaks and milestone badges to encourage consistent intercession.
 Accessibility: Voice-to-prayer dictation and audio playback for on-the-go intercession.
 Peer Support: Anonymous topic-based "Support Rooms" for matched peer interaction.
+Community Governance: Decentralized reporting and moderation system for long-term platform health.
+
 Works cited
 1. Anonymous Users - FusionAuth, https://fusionauth.io/docs/lifecycle/register-users/anonymous-user 2. How to Set Up an Anonymous User Flow | by FusionAuth - Medium, https://fusionauth.medium.com/how-to-set-up-an-anonymous-user-flow-5b6122357097 3. DynamoDB vs Firestore: Comparing AWS and Google Cloud NoSQL Databases - Dynomate, https://dynomate.io/blog/dynamodb-vs-firestore/ 4. DynamoDB vs Google Firestore - The Ultimate Comparison - Dynobase, https://dynobase.dev/dynamodb-vs-google-firestore/ 5. Google Firestore vs AWS DynamoDB comparison for serverless apps in Firestore - Examples & AI Generator - SQL Query Builder & Generator - AI Powered Database Assistant - AI2sql, https://ai2sql.io/compare/google-firestore-vs-aws-dynamodb-comparison-for-serverless-apps 6. Get started with Firebase Cloud Messaging in Web apps - Google, https://firebase.google.com/docs/cloud-messaging/js/client

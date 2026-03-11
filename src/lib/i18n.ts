@@ -1,5 +1,16 @@
 export type Language = 'en' | 'pt' | 'es' | 'fr' | 'ko' | 'id';
 
+export type TranslationSchema = {
+    appName: string;
+    nav: { discover: string; myPrayers: string; restoreSession: string; privacyFaq: string; newRequest: string; };
+    home: { subtitle: string; prayerLabel: string; prayerPlaceholder: string; locationLabel: string; locationPlaceholder: string; locationPrivacy: string; submit: string; anonNote: string; privacyLabel: string; visibilityPublic: string; visibilityUnlisted: string; visibilityPrivate: string; visibilityPublicDesc: string; visibilityUnlistedDesc: string; visibilityPrivateDesc: string; };
+    prayer: { prayerRequest: string; answeredPrayer: string; prayed: string; intercessors: string; locationPlaceholder: string; locationPrivacyNote: string; iPrayed: string; youPrayed: string; shareUrl: string; shareCopied: string; shareFailed: string; translateContent: string; yourRequest: string; editText: string; saveChanges: string; cancel: string; saving: string; prayerUpdated: string; markAnswered: string; prayerAnswered: string; privateNotice: string; accessDenied: string; privateDeniedMessage: string; };
+    discover: { title: string; subtitle: string; joinPrayer: string; loadMore: string; loading: string; endOfFeed: string; noPrayers: string; noPrayersSub: string; submitRequest: string; praying: string; justNow: string; mAgo: string; hAgo: string; dAgo: string; };
+    dashboard: { title: string; prayerKeyTitle: string; prayerKeyDesc: string; learnAnonymity: string; yourRequests: string; requestsFollowed: string; noRequests: string; noIntercessions: string; view: string; active: string; };
+    recover: { title: string; subtitle: string; prayerKey: string; button: string; backHome: string; howAnonymity: string; };
+    faq: { title: string; subtitle: string; questions: { q: string; a: string; }[]; errors: { tooShort: string; tooLong: string; invalidContent: string; tooManyLinks: string; repetition: string; justUrl: string; required: string; }; };
+};
+
 export const LANGUAGES: Record<Language, { name: string; flag: string }> = {
     en: { name: 'English', flag: '🇺🇸' },
     pt: { name: 'Português', flag: '🇧🇷' },
@@ -72,14 +83,25 @@ const translations = {
                 { q: 'Who runs this?', a: 'A personal ministry project to connect believers in prayer across borders. No ads, no data sales, no monetization.' },
                 { q: 'Can I hide my prayer from the Discover feed?', a: 'Yes. Use the "Unlisted" option. Your prayer will be hidden from the public feed but still accessible to anyone with the link.' },
                 { q: 'What is a "Private" prayer?', a: 'A Private prayer is restricted so only you (the owner) can view it. Even if someone has the link, they cannot see the prayer text without your specific Prayer Key / session.' },
+                { q: 'How can I contact support?', a: 'For any technical issues, feedback, or support requests, please contact us at support@praynow.live. We aim to respond within 48 hours.' },
+                { q: 'What are the community guidelines for prayers?', a: 'To maintain a sacred and supportive environment, we ask that all prayers remain respectful. Content involving hate speech, harassment, or explicit material is strictly prohibited and will be blocked or moderated.' },
             ],
+            errors: {
+                tooShort: 'Prayer is too short. Please provide at least {n} characters.',
+                tooLong: 'Prayer is too long. Please limit it to {n} characters.',
+                invalidContent: 'Malicious or invalid content detected.',
+                tooManyLinks: 'Too many links. Please keep the focus on the prayer.',
+                repetition: 'Invalid repetitive content detected.',
+                justUrl: 'Prayer content cannot be just a URL.',
+                required: 'Prayer text is required.'
+            }
         },
     },
     pt: {
         appName: 'Oração Anônima',
         nav: { discover: '🌍 Descobrir', myPrayers: '📿 Minhas Orações', restoreSession: '🔑 Restaurar Sessão', privacyFaq: '🔒 Privacidade & FAQ', newRequest: '+ Nova Oração' },
         home: {
-            subtitle: 'Envie uma oração e interceda pelos outros — anonimamente, dari mana saja.',
+            subtitle: 'Envie uma oração e interceda pelos outros — anonimamente, de qualquer lugar.',
             prayerLabel: 'Sua Oração',
             prayerPlaceholder: 'Senhor, eu oro por...',
             locationLabel: 'Sua Localização (Opcional)',
@@ -135,7 +157,20 @@ const translations = {
                 { q: 'Posso editar minha oração depois de enviá-la?', a: 'Sim. Na página da sua oração, você pode editar o texto ou marcar como respondida — apenas no dispositivo que a enviou.' },
                 { q: 'O que acontece se eu limpar o navegador?', a: 'Seus pedidos permanecem no banco de dados, mas você perde o acesso para gerenciá-los naquele dispositivo. Salve sua Chave de Oração antes de limpar.' },
                 { q: 'Quem mantém este serviço?', a: 'Um projeto ministerial pessoal para conectar crentes em oração além das fronteiras. Sem anúncios, sem venda de dados.' },
+                { q: 'Posso ocultar minha oração do feed Descobrir?', a: 'Sim. Use a opção "Não listado". Sua oração ficará oculta do feed público, mas ainda estará acessível a qualquer pessoa com o link.' },
+                { q: 'O que é uma oração "Privada"?', a: 'Uma oração Privada é restrita para que apenas você (o proprietário) possa vê-la. Mesmo que alguém tenha o link, não poderá ver o texto da oração sem a sua Chave de Oração / sessão específica.' },
+                { q: 'Como posso entrar em contato com o suporte?', a: 'Para quaisquer problemas técnicos, feedback ou solicitações de suporte, entre em contato conosco pelo e-mail support@praynow.live. Nosso objetivo é responder em até 48 horas.' },
+                { q: 'Quais são as diretrizes da comunidade para as orações?', a: 'Para manter um ambiente sagrado e de apoio, pedimos que todas as orações permaneçam respeitosas. Conteúdo envolvendo discurso de ódio, assédio ou material explícito é estritamente proibido e será bloqueado ou moderado.' },
             ],
+            errors: {
+                tooShort: 'A oração é muito curta. Por favor, forneça pelo menos {n} caracteres.',
+                tooLong: 'A oração é muito longa. Por favor, limite-a a {n} caracteres.',
+                invalidContent: 'Conteúdo malicioso ou inválido detectado.',
+                tooManyLinks: 'Muitos links. Por favor, mantenha o foco na oração.',
+                repetition: 'Conteúdo repetitivo inválido detectado.',
+                justUrl: 'O conteúdo da oração não pode ser apenas um URL.',
+                required: 'O texto da oração é obrigatório.'
+            }
         },
     },
     es: {
@@ -200,7 +235,18 @@ const translations = {
                 { q: '¿Quién administra esto?', a: 'Un proyecto ministerial personal para conectar creyentes en oración más allá de las fronteras. Sin anuncios, sin venta de datos.' },
                 { q: '¿Puedo ocultar mi oración del feed Descubrir?', a: 'Sí. Utiliza la opción "No listado". Tu oración se ocultará del feed público pero seguirá siendo accesible para cualquier persona que tenga el enlace.' },
                 { q: '¿Qué es una oración "Privada"?', a: 'Una oración privada está restringida para que solo tú (el propietario) puedas verla. Incluso si alguien tiene el enlace, no puede ver el texto de la oración sin tu Clave de Oración / sesión específica.' },
+                { q: '¿Cómo puedo contactar con el soporte?', a: 'Para cualquier problema técnico, comentarios o solicitudes de soporte, contáctenos en support@praynow.live. Nuestro objetivo es responder dentro de las 48 horas.' },
+                { q: '¿Cuáles son las pautas de la comunidad para las oraciones?', a: 'Para mantener un ambiente sagrado y de apoyo, pedimos que todas las oraciones sean respetuosas. El contenido que involucre discurso de odio, acoso o material explícito está estrictamente prohibido y será bloqueado o moderado.' },
             ],
+            errors: {
+                tooShort: 'La oración es demasiado corta. Por favor, proporcione al menos {n} caracteres.',
+                tooLong: 'La oración es demasiado larga. Por favor, limítela a {n} caracteres.',
+                invalidContent: 'Se ha detectado contenido malicioso o no válido.',
+                tooManyLinks: 'Demasiados enlaces. Por favor, concéntrate en la oración.',
+                repetition: 'Se ha detectado contenido repetitivo no válido.',
+                justUrl: 'El contenido de la oración no puede ser solo una URL.',
+                required: 'El texto de la oración es obligatorio.'
+            }
         },
     },
     fr: {
@@ -264,8 +310,19 @@ const translations = {
                 { q: 'Que se passe-t-il si je vide mon navigateur ?', a: 'Vos demandes restent dans la base de données, mais vous perdez l\'accès pour les gérer sur cet appareil. Conservez votre Clé de Prière avant de vider.' },
                 { q: 'Qui gère ce service ?', a: 'Un projet ministériel personnel pour connecter les croyants en prière au-delà des frontières. Sans publicité, sans vente de données.' },
                 { q: 'Puis-je masquer ma prière du flux Découvrir ?', a: 'Oui. Utilisez l\'option "Non répertorié". Votre prière sera masquée du flux public mais restera accessible à toute personne disposant du lien.' },
-                { q: 'Qu\'est-ce qu\'une prière "Privée" ?', a: 'Une prière privée est restreinte de sorte que vous seul (le propriétaire) pouvez la voir. Même si quelqu\'un a le lien, il ne peut pas voir le texte de la prière sans votre clé de prière / session spécifique.' },
+                { q: 'Qu\'est-ce qu\'une prière "Privée" ?', a: 'Une prière privée est restreinte de sorte que vous seul (le propriétaire) puissiez la voir. Même si quelqu\'un a le lien, il ne peut pas voir le texte de la prière sans votre clé de prière / session spécifique.' },
+                { q: 'Comment puis-je contacter le support ?', a: 'Pour tout problème technique, commentaire ou demande d\'assistance, veuillez nous contacter à support@praynow.live. Nous visons à répondre dans les 48 heures.' },
+                { q: 'Quelles sont les directives de la communauté pour les prières ?', a: 'Pour maintenir un environnement sacré et solidaire, nous demandons que toutes les prières restent respectueuses. Les contenus impliquant des discours de haine, du harcèlement ou des éléments explicites sont strictement interdits et seront bloqués ou modérés.' },
             ],
+            errors: {
+                tooShort: 'La prière est trop courte. Veuillez fournir au moins {n} caractères.',
+                tooLong: 'La prière est trop longue. Veuillez la limiter à {n} caractères.',
+                invalidContent: 'Contenu malveillant ou invalide détecté.',
+                tooManyLinks: 'Trop de liens. Veuillez vous concentrer sur la prière.',
+                repetition: 'Contenu répétitif invalide détecté.',
+                justUrl: 'le contenu de la prière ne peut pas être uniquement une URL.',
+                required: 'Le texte de la prière est requis.'
+            }
         },
     },
     ko: {
@@ -330,7 +387,18 @@ const translations = {
                 { q: '누가 이것을 운영하나요?', a: '국경을 넘어 믿음의 사람들을 기도로 연결하기 위한 개인 사역 프로젝트입니다. 광고, 데이터 판매 없습니다.' },
                 { q: '발견 피드에서 내 기도를 숨길 수 있나요?', a: '네. "일부 공개" 옵션을 사용하세요. 기도는 공개 피드에서 숨겨지지만 링크가 있는 사람은 여전히 볼 수 있습니다.' },
                 { q: '"비공개" 기도란 무엇인가요?', a: '비공개 기도는 소유자인 귀하만 볼 수 있도록 제한됩니다. 다른 사람이 링크를 가지고 있어도 귀하의 기도 열쇠/세션 없이는 기도 내용을 볼 수 없습니다.' },
+                { q: '고객 지원에 어떻게 연락하나요?', a: '기술적인 문제, 피드백 또는 지원 요청이 있는 경우 support@praynow.live로 문의해 주세요. 48시간 이내에 답변을 드리는 것을 목표로 하고 있습니다.' },
+                { q: '기도에 대한 커뮤니티 가이드라인은 무엇인가요?', a: '신성하고 서로 돕는 환경을 유지하기 위해 모든 기도가 정중함을 유지해 주시기를 부탁드립니다. 증오 발언, 괴롭힘 또는 노골적인 내용이 포함된 콘텐츠는 엄격히 금지되며 차단되거나 중재될 수 있습니다.' },
             ],
+            errors: {
+                tooShort: '기도가 너무 짧습니다. 최소 {n}자 이상 입력해 주세요.',
+                tooLong: '기도가 너무 깁니다. {n}자 이내로 제한해 주세요.',
+                invalidContent: '악성 또는 유효하지 않은 콘텐츠가 감지되었습니다.',
+                tooManyLinks: '링크가 너무 많습니다. 기도 내용에 집중해 주세요.',
+                repetition: '유효하지 않은 반복 콘텐츠가 감지되었습니다.',
+                justUrl: '기도 내용은 URL만으로 구성될 수 없습니다.',
+                required: '기도 내용은 필수입니다.'
+            }
         },
     },
     id: {
@@ -395,13 +463,24 @@ const translations = {
                 { q: 'Siapa yang menjalankan ini?', a: 'Sebuah proyek pelayanan pribadi untuk menghubungkan orang percaya dalam doa lintas batas geografis. Tanpa iklan, tanpa penjualan data.' },
                 { q: 'Bisakah saya menyembunyikan doa saya dari feed Temukan?', a: 'Ya. Gunakan opsi "Tersembunyi". Doa Anda akan disembunyikan dari feed publik tetapi tetap dapat diakses oleh siapa pun yang memiliki tautan.' },
                 { q: 'Apa itu doa "Privat"?', a: 'Doa Privat dibatasi sehingga hanya Anda (pemilik) yang dapat melihatnya. Bahkan jika seseorang memiliki tautan, mereka tidak dapat melihat teks doa tanpa Kunci Doa / sesi spesifik Anda.' },
+                { q: 'Bagaimana cara menghubungi dukungan?', a: 'Untuk masalah teknis, umpan balik, atau permintaan dukungan, silakan hubungi kami di support@praynow.live. Kami menargetkan untuk membalas dalam waktu 48 jam.' },
+                { q: 'Apa panduan komunitas untuk doa?', a: 'Untuk menjaga lingkungan yang sakral dan saling mendukung, kami meminta agar semua doa tetap sopan. Konten yang melibatkan ujaran kebencian, pelecehan, atau materi eksplisit sangat dilarang dan akan diblokir atau dimoderasi.' },
             ],
+            errors: {
+                tooShort: 'Doa terlalu pendek. Harap berikan setidaknya {n} karakter.',
+                tooLong: 'Doa terlalu panjang. Harap batasi hingga {n} karakter.',
+                invalidContent: 'Konten berbahaya atau tidak valid terdeteksi.',
+                tooManyLinks: 'Terlalu banyak tautan. Harap tetap fokus pada doa.',
+                repetition: 'Konten repetitif tidak valid terdeteksi.',
+                justUrl: 'Konten doa tidak boleh hanya berupa URL.',
+                required: 'Teks doa wajib diisi.'
+            }
         },
     },
 };
 
-export function getTranslations(lang: Language) {
-    return translations[lang] ?? translations.en;
+export function getTranslations(lang: Language): TranslationSchema {
+    return (translations[lang] ?? translations.en) as TranslationSchema;
 }
 
-export type T = ReturnType<typeof getTranslations>;
+export type T = TranslationSchema;

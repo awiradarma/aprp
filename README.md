@@ -152,10 +152,12 @@ node scripts/cleanup-inactive-users.js --days 180
 | 🔔 **Push Notifications (FCM)** | Notify users when someone prays for their request |
 | 🌐 **Multi-language UI** | react-i18next + AI-powered prayer translation |
 | 🗺️ **Marker clustering** | Cluster overlapping map dots for clarity at low zoom |
+| 🛡️ **Content moderation** | Offensive content detection for Public & Unlisted prayers. |
+| ☎️ **Support system** | Dedicated channel for user support and feedback. |
+| 📜 **Community Guidelines** | Clear rules for prayer content and platform usage. |
 | 🔐 **Real email/password auth** | Firebase Auth login page to replace the stub registration |
-| � **Search & Filters** | Search by keyword, filter by topic tag or geolocation proximity |
-| �📖 **Scripture recommendations** | AI-suggested Bible verses based on prayer sentiment |
-| 🛡️ **Content moderation** | Shadow-ban via AWS Bedrock Guardrails or GCP NLP API |
+| 🔍 **Search & Filters** | Search by keyword, filter by topic tag or geohash proximity |
+| 📖 **Scripture recommendations** | AI-suggested Bible verses based on prayer sentiment |
 | 🚨 **Crisis detection** | NLP to flag self-harm markers and surface resources |
 | 🎖️ **Prayer streaks** | Gamification to encourage consistent intercession |
 | 🎙️ **Voice-to-prayer** | Audio dictation and playback for accessibility |
