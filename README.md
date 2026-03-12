@@ -43,8 +43,9 @@ This is a personal ministry tool designed to connect believers across geographic
 ### 🛡️ Privacy, Localization & Moderation (Phase 4)
 - **Privacy Levels** — choose between `Public` (discoverable), `Unlisted` (direct link only), and `Private` (owner only)
 - **Multi-language Support** — Full UI localization for English, Indonesian, Spanish, French, German, and Portuguese
-- **AI-Powered Moderation** — Automated detection of spam, ads, and suspicious patterns. Offensive content is rejected; ambiguous content is shadow-flagged for review
-- **Admin Shield** — Secure dashboard for human moderation, content review, and abandoned session cleanup
+- **AI-Powered Moderation** — Automated detection of spam, ads, and suspicious patterns. Offensive content is rejected; ambiguous content is shadowed for review
+- **Admin Shield** — Secure dashboard with human review, **Traffic Flow (24h/7d/30d) analytics**, and abandoned session cleanup
+- **Activity Tracking** — Global `lastSeenAt` tracking for all users (excluding admin activities) to monitor platform health
 
 ---
 
@@ -52,14 +53,15 @@ This is a personal ministry tool designed to connect believers across geographic
 
 ### 🔐 AI Moderation Logic
 Every prayer submission passes through a content analysis engine (`src/lib/moderation.ts`):
-1. **Reject**: Obvious commercial spam (Viagra, Crypto scams, etc.) is rejected with a user-facing error message.
-2. **Flag**: Suspicious patterns (links, WhatsApp numbers) are automatically set to `Private` and queued for admin review.
+1. **Reject**: Obvious commercial spam is rejected with a localized error message.
+2. **Flag**: Suspicious patterns (links, WhatsApp numbers) are automatically set to `Private` and queued for review.
 3. **Allow**: Clean prayers proceed with their intended visibility.
 
 ### 🛡️ Admin Shield Dashboard
 Accessible via a secret key stored in Firestore: `/admin/[secret-key]`.
-- **Content Review**: Approve flagged prayers to make them public or delete them.
-- **Session Cleanup**: Detect and remove "stale" anonymous sessions (inactive for 7+ days with no prayer/intercession history).
+- **Platform Insights**: Tri-column analytics showing Privacy Breakdown, Rolling Traffic Flow, and Core Health (Conversion & Stale Ratios).
+- **Engagement Monitoring**: Real-time tracking of the "Intercession Rate" (Intercessions vs. Prayers).
+- **Session Cleanup**: One-click detection and removal of "stale" sessions (inactive for 7+ days with no prayer/intercession history).
 
 ---
 
@@ -68,15 +70,16 @@ Accessible via a secret key stored in Firestore: `/admin/[secret-key]`.
 ```
 src/
 ├── app/
-│   ├── layout.tsx              # Root layout: fonts, page title, metadata
+│   ├── layout.tsx              # Root layout: fonts, metadata, global TrafficTracker
 │   ├── page.tsx                # Homepage: prayer form + global map
 │   ├── discover/page.tsx       # Browse all prayers
 │   ├── dashboard/page.tsx      # User's personal prayer history
 │   ├── recover/page.tsx        # Restore session via recovery code
 │   ├── p/[id]/page.tsx         # Individual prayer detail page
-│   ├── admin/[key]/page.tsx    # Admin Shield Hub (Moderation & Cleanup)
+│   ├── admin/[key]/page.tsx    # Admin Shield Hub (Insights & Moderation)
 │   └── actions/
 │       ├── admin.ts            # Admin-only actions (approve, delete, cleanup)
+│       ├── auth.ts             # User registration + activity tracking
 │       ├── prayer.ts           # Submit prayer (includes AI moderation)
 │       ├── intercede.ts        # "I Prayed" action
 │       ├── map.ts              # Fetch markers for global map
@@ -85,12 +88,14 @@ src/
 │       └── recovery.ts        # Session recovery logic
 ├── components/
 │   ├── GlobalMap.tsx           # Homepage world map (MapLibre)
+│   ├── TrafficTracker.tsx      # Silent activity tracking (Client Component)
 │   ├── IntercessionMap.tsx     # Per-prayer intercessor mini-map
 │   ├── ShareButton.tsx         # Web Share API / clipboard fallback
 │   └── PrayerOwnerActions.tsx  # Owner-only edit and answered controls
 └── lib/
-    ├── firebase/server.ts      # Firebase Admin SDK connection (server-side only)
-    └── geo.ts                  # jitterCoordinate() + getGeohash() privacy utilities
+    ├── firebase/server.ts      # Firebase Admin SDK connection
+    ├── moderation.ts           # NLP/Pattern-based moderation logic
+    └── geo.ts                  # Privacy-preserving geo-utilities
 ```
 
 ---
@@ -140,29 +145,17 @@ Add all environment variables above in **Vercel → Project → Settings → Env
 
 ## Database Maintenance
 
-### Cleaning up inactive anonymous stubs
-
-Every dashboard visit creates or updates a `users` document. To remove stubs that have had no activity in over a year **and have no prayer data**:
-
-```bash
-# Preview (no deletions)
-node scripts/cleanup-inactive-users.js --dry-run
-
-# Delete stubs inactive for >365 days (default)
-node scripts/cleanup-inactive-users.js
-
-# Custom threshold
-node scripts/cleanup-inactive-users.js --days 180
-```
+### Session Cleanup
+Integrated tool available in the **Admin Shield**. It identifies and removes anonymous sessions with no prayer history and no intercessions that have been inactive for over 7 days.
 
 ---
+
+## Roadmap / Future Phase Items
 
 | Feature | Notes |
 |---|---|
 | 🔔 **Push Notifications (FCM)** | Notify users when someone prays for their request |
-| 🗺️ **Marker clustering** | Cluster overlapping map dots for clarity at low zoom |
-| 🔐 **Real email/password auth** | Firebase Auth login page to replace the stub registration |
-| 🔍 **Search & Filters** | Search by keyword, filter by topic tag or geohash proximity |
-| 🎙️ **Voice-to-prayer** | Audio dictation and playback for accessibility |
-| 📖 **Scripture recommendations** | AI-suggested Bible verses based on prayer sentiment |
-| 🚨 **Crisis detection** | NLP to flag self-harm markers and surface resources |
+| 🔐 **Real email/password auth** | Optional Firebase Auth login to persist sessions across devices |
+| 🔍 **Search & Filters** | Search by keyword, filter by topic tag or proximity |
+| 🚨 **Crisis detection** | NLP to flag emergency markers and surface resources |
+| �️ **Marker clustering** | Optimization for high-traffic regions on the world map |
