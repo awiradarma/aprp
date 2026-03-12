@@ -67,6 +67,12 @@ const mockDb = {
                 if (!globalMockDbData[colName]) globalMockDbData[colName] = {};
                 globalMockDbData[colName][docId] = updatedData;
                 console.log(`[Mock DB] Updated ${colName}/${docId}`);
+            },
+            delete: async () => {
+                if (globalMockDbData[colName]) {
+                    delete globalMockDbData[colName][docId];
+                    console.log(`[Mock DB] Deleted ${colName}/${docId}`);
+                }
             }
         }),
         where: (field: string, op: string, value: any) => {
