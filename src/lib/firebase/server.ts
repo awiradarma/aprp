@@ -102,12 +102,14 @@ const mockDb = {
                     }
                     return {
                         empty: results.length === 0,
-                        docs: results
+                        docs: results,
+                        size: results.length
                     };
                 },
                 orderBy: () => chainable,
                 limit: () => chainable,
                 startAfter: () => chainable,
+                where: (f: string, o: string, v: any) => mockDb.collection(colName).where(f, o, v),
             };
             return chainable;
         },
@@ -119,13 +121,41 @@ const mockDb = {
             }));
             return {
                 empty: results.length === 0,
-                docs: results
+                docs: results,
+                size: results.length
             };
         },
         orderBy: function () { return this; },
         limit: function () { return this; },
         startAfter: function () { return this; },
-    })
+        count: () => ({
+            get: async () => ({
+                data: () => {
+                    const colData = globalMockDbData[colName] || {};
+                    return { count: Object.keys(colData).length };
+                }
+            })
+        }),
+    }),
+    batch: () => {
+        const operations: Array<() => void> = [];
+        return {
+            set: (docRef: any, data: any, options?: any) => {
+                operations.push(() => docRef.set(data, options));
+            },
+            update: (docRef: any, data: any) => {
+                operations.push(() => docRef.update(data));
+            },
+            delete: (docRef: any) => {
+                operations.push(() => docRef.delete());
+            },
+            commit: async () => {
+                for (const op of operations) {
+                    op();
+                }
+            }
+        };
+    }
 };
 
 export const adminDb = customInitApp ? customInitApp.firestore() : mockDb;

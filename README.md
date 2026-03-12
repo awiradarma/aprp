@@ -40,15 +40,26 @@ This is a personal ministry tool designed to connect believers across geographic
 - **Dashboard** — shows all prayers you submitted and all prayers you've interceded for
 - **Intercessor locations** — when clicking "I Prayed", users can optionally share their location (privacy-preserving) which appears as an amber marker on a mini-map on the prayer page
 
-### 🌍 Discovery & Global Map (Phase 3)
-- **Global Map** on the homepage — live MapLibre map showing blue markers for every geolocated prayer around the world
-- **Discover page** (`/discover`) — browsable list of all prayers with location tags, timestamps, and intercession counts
-- **Intercessor mini-map** — each prayer detail page shows a small world map with amber markers showing where intercessors prayed from
+### 🛡️ Privacy, Localization & Moderation (Phase 4)
+- **Privacy Levels** — choose between `Public` (discoverable), `Unlisted` (direct link only), and `Private` (owner only)
+- **Multi-language Support** — Full UI localization for English, Indonesian, Spanish, French, German, and Portuguese
+- **AI-Powered Moderation** — Automated detection of spam, ads, and suspicious patterns. Offensive content is rejected; ambiguous content is shadow-flagged for review
+- **Admin Shield** — Secure dashboard for human moderation, content review, and abandoned session cleanup
 
-### ✏️ Prayer Management
-- **Edit prayer** — owners can inline-edit their prayer after submission
-- **Mark as Answered** — owners can mark a prayer as answered; the header turns green and shows "🙌 Answered Prayer"
-- **Share button** — uses the native Web Share API on mobile; falls back to clipboard copy on desktop
+---
+
+## Technical Details
+
+### 🔐 AI Moderation Logic
+Every prayer submission passes through a content analysis engine (`src/lib/moderation.ts`):
+1. **Reject**: Obvious commercial spam (Viagra, Crypto scams, etc.) is rejected with a user-facing error message.
+2. **Flag**: Suspicious patterns (links, WhatsApp numbers) are automatically set to `Private` and queued for admin review.
+3. **Allow**: Clean prayers proceed with their intended visibility.
+
+### 🛡️ Admin Shield Dashboard
+Accessible via a secret key stored in Firestore: `/admin/[secret-key]`.
+- **Content Review**: Approve flagged prayers to make them public or delete them.
+- **Session Cleanup**: Detect and remove "stale" anonymous sessions (inactive for 7+ days with no prayer/intercession history).
 
 ---
 
@@ -63,14 +74,15 @@ src/
 │   ├── dashboard/page.tsx      # User's personal prayer history
 │   ├── recover/page.tsx        # Restore session via recovery code
 │   ├── p/[id]/page.tsx         # Individual prayer detail page
+│   ├── admin/[key]/page.tsx    # Admin Shield Hub (Moderation & Cleanup)
 │   └── actions/
-│       ├── prayer.ts           # Submit prayer (geocode → jitter → geohash → Firestore)
-│       ├── intercede.ts        # "I Prayed" action with optional location capture
+│       ├── admin.ts            # Admin-only actions (approve, delete, cleanup)
+│       ├── prayer.ts           # Submit prayer (includes AI moderation)
+│       ├── intercede.ts        # "I Prayed" action
 │       ├── map.ts              # Fetch markers for global map
 │       ├── discover.ts         # Fetch prayers for Discover page
-│       ├── intercessions.ts    # Fetch intercessor locations for prayer mini-map
-│       ├── owner.ts            # Edit + Mark as Answered (server-side auth)
-│       └── recovery.ts        # Generate/retrieve recovery codes; track lastSeenAt
+│       ├── owner.ts            # Edit + Mark as Answered
+│       └── recovery.ts        # Session recovery logic
 ├── components/
 │   ├── GlobalMap.tsx           # Homepage world map (MapLibre)
 │   ├── IntercessionMap.tsx     # Per-prayer intercessor mini-map
@@ -145,19 +157,12 @@ node scripts/cleanup-inactive-users.js --days 180
 
 ---
 
-## Roadmap
-
 | Feature | Notes |
 |---|---|
 | 🔔 **Push Notifications (FCM)** | Notify users when someone prays for their request |
-| 🌐 **Multi-language UI** | react-i18next + AI-powered prayer translation |
 | 🗺️ **Marker clustering** | Cluster overlapping map dots for clarity at low zoom |
-| 🛡️ **Content moderation** | Offensive content detection for Public & Unlisted prayers. |
-| ☎️ **Support system** | Dedicated channel for user support and feedback. |
-| 📜 **Community Guidelines** | Clear rules for prayer content and platform usage. |
 | 🔐 **Real email/password auth** | Firebase Auth login page to replace the stub registration |
 | 🔍 **Search & Filters** | Search by keyword, filter by topic tag or geohash proximity |
+| 🎙️ **Voice-to-prayer** | Audio dictation and playback for accessibility |
 | 📖 **Scripture recommendations** | AI-suggested Bible verses based on prayer sentiment |
 | 🚨 **Crisis detection** | NLP to flag self-harm markers and surface resources |
-| 🎖️ **Prayer streaks** | Gamification to encourage consistent intercession |
-| 🎙️ **Voice-to-prayer** | Audio dictation and playback for accessibility |

@@ -28,6 +28,13 @@ export default async function AdminPage({ params }: Props) {
         ...doc.data()
     })) as any[];
 
+    // Quick stats for the dashboard
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+    const staleUsersSnap = await adminDb.collection("users")
+        .where("lastSeenAt", "<", sevenDaysAgo)
+        .get();
+
     return (
         <div className="min-h-screen bg-gray-50 p-8">
             <div className="max-w-4xl mx-auto">
@@ -36,10 +43,36 @@ export default async function AdminPage({ params }: Props) {
                         <h1 className="text-3xl font-black text-gray-900">🛡️ Admin Shield</h1>
                         <p className="text-gray-500">Content Moderation & Review Dashboard</p>
                     </div>
-                    <div className="bg-red-100 text-red-700 px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
-                        Secure Session
+                    <div className="flex gap-4 items-center">
+                        <form action={async () => {
+                            "use server";
+                            const { cleanupAbandonedSessionsAction } = await import("@/app/actions/admin");
+                            await cleanupAbandonedSessionsAction(key);
+                        }}>
+                            <button className="bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 px-4 py-2 rounded-xl text-sm font-bold transition-colors">
+                                🧹 Clean Stale Sessions ({staleUsersSnap.size})
+                            </button>
+                        </form>
+                        <div className="bg-red-100 text-red-700 px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
+                            Secure Session
+                        </div>
                     </div>
                 </header>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                    <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
+                        <span className="text-xs font-bold text-gray-400 uppercase tracking-widest block mb-2">Flagged Content</span>
+                        <div className="text-3xl font-black text-orange-600">{flaggedPrayers.length}</div>
+                    </div>
+                    <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
+                        <span className="text-xs font-bold text-gray-400 uppercase tracking-widest block mb-2">Stale Sessions</span>
+                        <div className="text-3xl font-black text-gray-600">{staleUsersSnap.size}</div>
+                    </div>
+                    <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
+                        <span className="text-xs font-bold text-gray-400 uppercase tracking-widest block mb-2">Total Prayers</span>
+                        <div className="text-3xl font-black text-blue-600">{(await adminDb.collection("prayers").count().get()).data().count}</div>
+                    </div>
+                </div>
 
                 <div className="space-y-6">
                     {flaggedPrayers.length === 0 && (

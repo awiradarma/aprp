@@ -36,3 +36,54 @@ export async function deletePrayerAction(key: string, prayerId: string) {
     revalidatePath("/discover");
     revalidatePath("/");
 }
+
+export async function cleanupAbandonedSessionsAction(key: string) {
+    await verifyAdminKey(key);
+
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+    const usersSnapshot = await adminDb.collection("users")
+        .where("lastSeenAt", "<", sevenDaysAgo)
+        .get();
+
+    let deletedCount = 0;
+    const batchSize = 500;
+    let batch = adminDb.batch();
+
+    for (const userDoc of usersSnapshot.docs) {
+        const userId = userDoc.id;
+
+        // Check for prayers
+        const prayersQuery = await adminDb.collection("prayers")
+            .where("requesterId", "==", userId)
+            .limit(1)
+            .get();
+
+        if (!prayersQuery.empty) continue;
+
+        // Check for intercessions
+        const intercessionsQuery = await adminDb.collection("user_intercessions")
+            .where("userId", "==", userId)
+            .limit(1)
+            .get();
+
+        if (!intercessionsQuery.empty) continue;
+
+        // Abandoned!
+        batch.delete(userDoc.ref);
+        deletedCount++;
+
+        if (deletedCount % batchSize === 0) {
+            await batch.commit();
+            batch = adminDb.batch();
+        }
+    }
+
+    if (deletedCount % batchSize !== 0) {
+        await batch.commit();
+    }
+
+    revalidatePath(`/admin/${key}`);
+    return { deletedCount };
+}
