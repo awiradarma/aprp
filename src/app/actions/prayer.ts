@@ -56,7 +56,19 @@ export async function submitPrayerAction(prevState: PrayerState, formData: FormD
             }
         }
 
-        const visibility = (formData.get("visibility") as string) || "public";
+        const visibilityInput = (formData.get("visibility") as string) || "public";
+
+        // AI Moderation Check
+        const { analyzePrayerContent } = await import("@/lib/moderation");
+        const modResult = await analyzePrayerContent(text);
+
+        if (modResult.decision === "REJECT") {
+            throw new Error(modResult.reason || "invalidContent");
+        }
+
+        const moderationStatus = modResult.decision === "FLAG" ? "flagged" : "clean";
+        const visibility = modResult.decision === "FLAG" ? "private" : visibilityInput;
+
         const prayerId = nanoid(16);
 
         await adminDb.collection("prayers").doc(prayerId).set({
@@ -67,7 +79,12 @@ export async function submitPrayerAction(prevState: PrayerState, formData: FormD
             locationString: locationStr || null,
             jitteredCoords,
             geohash,
-            visibility
+            visibility,
+            moderation: {
+                status: moderationStatus,
+                flaggedReason: modResult.decision === "FLAG" ? modResult.reason : null,
+                reviewed: false
+            }
         });
 
         // Redirect to the newly created prayer page

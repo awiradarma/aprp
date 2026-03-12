@@ -7,6 +7,8 @@ export async function fetchMapPrayers() {
         // Usually, you'd do a prefix match on geohash here for a specific viewport
         // but for the global map overview, we'll fetch recently geocoded prayers
         const prayersSnapshot = await (adminDb.collection("prayers") as any)
+            .where("visibility", "==", "public")
+            .where("moderation.status", "==", "clean")
             .orderBy("createdAt", "desc")
             .limit(500)
             .get();

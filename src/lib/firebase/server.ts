@@ -69,22 +69,42 @@ const mockDb = {
                 console.log(`[Mock DB] Updated ${colName}/${docId}`);
             }
         }),
-        where: (field: string, op: string, value: any) => ({
-            get: async () => {
-                const colData = globalMockDbData[colName] || {};
-                const results: any[] = [];
-                for (const docId of Object.keys(colData)) {
-                    const docData = colData[docId];
-                    if (op === "==" && docData[field] === value) {
-                        results.push({ id: docId, data: () => docData });
+        where: (field: string, op: string, value: any) => {
+            const chainable = {
+                get: async () => {
+                    const colData = globalMockDbData[colName] || {};
+                    const results: any[] = [];
+                    for (const docId of Object.keys(colData)) {
+                        const docData = colData[docId];
+
+                        // Handle nested field lookup (e.g. "moderation.status")
+                        let actualValue;
+                        if (field.includes('.')) {
+                            const parts = field.split('.');
+                            let current = docData;
+                            for (const part of parts) {
+                                current = current?.[part];
+                            }
+                            actualValue = current;
+                        } else {
+                            actualValue = docData[field];
+                        }
+
+                        if (op === "==" && actualValue === value) {
+                            results.push({ id: docId, data: () => docData });
+                        }
                     }
-                }
-                return {
-                    empty: results.length === 0,
-                    docs: results
-                };
-            }
-        }),
+                    return {
+                        empty: results.length === 0,
+                        docs: results
+                    };
+                },
+                orderBy: () => chainable,
+                limit: () => chainable,
+                startAfter: () => chainable,
+            };
+            return chainable;
+        },
         get: async () => {
             const colData = globalMockDbData[colName] || {};
             const results = Object.keys(colData).map((docId) => ({
@@ -95,7 +115,10 @@ const mockDb = {
                 empty: results.length === 0,
                 docs: results
             };
-        }
+        },
+        orderBy: function () { return this; },
+        limit: function () { return this; },
+        startAfter: function () { return this; },
     })
 };
 

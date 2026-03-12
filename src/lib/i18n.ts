@@ -8,7 +8,7 @@ export type TranslationSchema = {
     discover: { title: string; subtitle: string; joinPrayer: string; loadMore: string; loading: string; endOfFeed: string; noPrayers: string; noPrayersSub: string; submitRequest: string; praying: string; justNow: string; mAgo: string; hAgo: string; dAgo: string; };
     dashboard: { title: string; prayerKeyTitle: string; prayerKeyDesc: string; learnAnonymity: string; yourRequests: string; requestsFollowed: string; noRequests: string; noIntercessions: string; view: string; active: string; };
     recover: { title: string; subtitle: string; prayerKey: string; button: string; backHome: string; howAnonymity: string; };
-    faq: { title: string; subtitle: string; questions: { q: string; a: string; }[]; errors: { tooShort: string; tooLong: string; invalidContent: string; tooManyLinks: string; repetition: string; justUrl: string; required: string; }; };
+    faq: { title: string; subtitle: string; questions: { q: string; a: string; }[]; errors: { tooShort: string; tooLong: string; invalidContent: string; tooManyLinks: string; repetition: string; justUrl: string; required: string; commercialContent: string; }; };
 };
 
 export const LANGUAGES: Record<Language, { name: string; flag: string }> = {
@@ -93,7 +93,8 @@ const translations = {
                 tooManyLinks: 'Too many links. Please keep the focus on the prayer.',
                 repetition: 'Invalid repetitive content detected.',
                 justUrl: 'Prayer content cannot be just a URL.',
-                required: 'Prayer text is required.'
+                required: 'Prayer text is required.',
+                commercialContent: 'Commercial advertisements and spam are not permitted.'
             }
         },
     },
@@ -169,7 +170,8 @@ const translations = {
                 tooManyLinks: 'Muitos links. Por favor, mantenha o foco na oração.',
                 repetition: 'Conteúdo repetitivo inválido detectado.',
                 justUrl: 'O conteúdo da oração não pode ser apenas um URL.',
-                required: 'O texto da oração é obrigatório.'
+                required: 'O texto da oração é obrigatório.',
+                commercialContent: 'Anúncios comerciais e spam não são permitidos.'
             }
         },
     },
@@ -245,7 +247,8 @@ const translations = {
                 tooManyLinks: 'Demasiados enlaces. Por favor, concéntrate en la oración.',
                 repetition: 'Se ha detectado contenido repetitivo no válido.',
                 justUrl: 'El contenido de la oración no puede ser solo una URL.',
-                required: 'El texto de la oración es obligatorio.'
+                required: 'El texto de la oración es obligatorio.',
+                commercialContent: 'No se permiten anuncios comerciales ni spam.'
             }
         },
     },
@@ -321,7 +324,8 @@ const translations = {
                 tooManyLinks: 'Trop de liens. Veuillez vous concentrer sur la prière.',
                 repetition: 'Contenu répétitif invalide détecté.',
                 justUrl: 'le contenu de la prière ne peut pas être uniquement une URL.',
-                required: 'Le texte de la prière est requis.'
+                required: 'Le texte de la prière est requis.',
+                commercialContent: 'Les publicités commerciales et le spam ne sont pas autorisés.'
             }
         },
     },
@@ -397,7 +401,8 @@ const translations = {
                 tooManyLinks: '링크가 너무 많습니다. 기도 내용에 집중해 주세요.',
                 repetition: '유효하지 않은 반복 콘텐츠가 감지되었습니다.',
                 justUrl: '기도 내용은 URL만으로 구성될 수 없습니다.',
-                required: '기도 내용은 필수입니다.'
+                required: '기도 내용은 필수입니다.',
+                commercialContent: '상업적 광고나 스팸은 허용되지 않습니다.'
             }
         },
     },
@@ -473,7 +478,8 @@ const translations = {
                 tooManyLinks: 'Terlalu banyak tautan. Harap tetap fokus pada doa.',
                 repetition: 'Konten repetitif tidak valid terdeteksi.',
                 justUrl: 'Konten doa tidak boleh hanya berupa URL.',
-                required: 'Teks doa wajib diisi.'
+                required: 'Teks doa wajib diisi.',
+                commercialContent: 'Iklan komersial dan spam tidak diperbolehkan.'
             }
         },
     },
