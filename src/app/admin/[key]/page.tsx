@@ -32,10 +32,13 @@ export default async function AdminPage({ params }: Props) {
     const now = new Date();
     const oneDayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
     const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+    const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
 
     const [
         totalUsers,
         activeUsers24h,
+        activeUsers7d,
+        activeUsers30d,
         staleUsers,
         totalPrayers,
         answeredPrayers,
@@ -45,6 +48,8 @@ export default async function AdminPage({ params }: Props) {
     ] = await Promise.all([
         adminDb.collection("users").count().get(),
         adminDb.collection("users").where("lastSeenAt", ">", oneDayAgo).get(),
+        adminDb.collection("users").where("lastSeenAt", ">", sevenDaysAgo).get(),
+        adminDb.collection("users").where("lastSeenAt", ">", thirtyDaysAgo).get(),
         adminDb.collection("users").where("lastSeenAt", "<", sevenDaysAgo).get(),
         adminDb.collection("prayers").count().get(),
         adminDb.collection("prayers").where("answeredAt", "!=", null).get(),
@@ -106,15 +111,15 @@ export default async function AdminPage({ params }: Props) {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-                    <div className="md:col-span-2 bg-white p-8 rounded-3xl border border-gray-100 shadow-sm">
+                    <div className="md:col-span-3 bg-white p-8 rounded-3xl border border-gray-100 shadow-sm">
                         <h2 className="text-sm font-black text-gray-900 uppercase tracking-widest mb-6 border-b pb-4">Platform Insights</h2>
-                        <div className="grid grid-cols-2 gap-8">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
                             <div>
                                 <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">Privacy Breakdown</h3>
                                 <div className="space-y-3">
                                     <div className="flex items-center justify-between text-xs">
-                                        <span className="text-gray-500">Public</span>
-                                        <span className="font-bold text-gray-900">{publicPrayers.size}</span>
+                                        <span className="text-gray-500 font-medium">Public</span>
+                                        <span className="font-black text-gray-900">{publicPrayers.size}</span>
                                     </div>
                                     <div className="h-1.5 w-full bg-gray-100 rounded-full overflow-hidden">
                                         <div
@@ -123,8 +128,8 @@ export default async function AdminPage({ params }: Props) {
                                         />
                                     </div>
                                     <div className="flex items-center justify-between text-xs">
-                                        <span className="text-gray-500">Private/Shadowed</span>
-                                        <span className="font-bold text-gray-900">{privatePrayers.size}</span>
+                                        <span className="text-gray-500 font-medium">Shadowed</span>
+                                        <span className="font-black text-gray-900">{privatePrayers.size}</span>
                                     </div>
                                     <div className="h-1.5 w-full bg-gray-100 rounded-full overflow-hidden">
                                         <div
@@ -135,23 +140,54 @@ export default async function AdminPage({ params }: Props) {
                                 </div>
                             </div>
                             <div>
+                                <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">Traffic Flow</h3>
+                                <div className="space-y-3 text-xs">
+                                    <div className="flex justify-between">
+                                        <span className="text-gray-500 font-medium">24 Hours</span>
+                                        <span className={`font-black ${activeUsers24h.size > 0 ? 'text-green-600' : 'text-gray-400'}`}>
+                                            {activeUsers24h.size} souls
+                                        </span>
+                                    </div>
+                                    <div className="flex justify-between">
+                                        <span className="text-gray-500 font-medium">7 Days</span>
+                                        <span className="font-black text-gray-900">{activeUsers7d.size} souls</span>
+                                    </div>
+                                    <div className="flex justify-between">
+                                        <span className="text-gray-500 font-medium">30 Days</span>
+                                        <span className="font-black text-gray-900">{activeUsers30d.size} souls</span>
+                                    </div>
+                                    <div className="mt-4 flex items-center gap-2 bg-gray-50 p-2 rounded-lg border border-gray-100/50">
+                                        <div className={`w-2 h-2 rounded-full ${activeUsers24h.size > 0 ? 'bg-green-500 animate-pulse' : 'bg-gray-300'}`}></div>
+                                        <span className="text-[10px] font-bold text-gray-700 uppercase">
+                                            {activeUsers24h.size > 0 ? 'Live Access' : 'No Recent Activity'}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
                                 <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">Core Health</h3>
                                 <div className="space-y-4">
-                                    <div className="bg-gray-50 p-3 rounded-xl">
+                                    <div className="bg-gray-50 p-3 rounded-xl border border-gray-100">
                                         <div className="text-[10px] text-gray-400 font-bold uppercase">Stale Session Ratio</div>
                                         <div className="text-xl font-black text-gray-700">
                                             {((staleUsers.size / (totalUsers.data().count || 1)) * 100).toFixed(0)}%
                                         </div>
                                     </div>
-                                    <div className="bg-gray-50 p-3 rounded-xl">
-                                        <div className="text-[10px] text-gray-400 font-bold uppercase">Conversion</div>
+                                    <div className="bg-gray-50 p-3 rounded-xl border border-gray-100">
+                                        <div className="text-[10px] text-gray-400 font-bold uppercase">User Conversion</div>
                                         <div className="text-xl font-black text-gray-700">
-                                            {intercessionRate}% <span className="text-[10px] text-gray-400">interceded</span>
+                                            {intercessionRate}% <span className="text-[10px] text-gray-400">engaged</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                    <div className="md:col-span-2 flex flex-col justify-center bg-white p-8 rounded-3xl border border-gray-100 shadow-sm italic text-gray-500 text-sm leading-relaxed">
+                        "For where two or three are gathered together in My name, I am there in the midst of them." — Matthew 18:20
                     </div>
 
                     <div className="bg-gradient-to-br from-indigo-600 to-blue-700 p-8 rounded-3xl shadow-xl text-white">

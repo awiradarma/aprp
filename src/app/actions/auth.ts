@@ -37,3 +37,17 @@ export async function registerAction(formData: FormData) {
     // Redirect to dashboard on success
     redirect("/dashboard");
 }
+
+export async function trackVisitAction() {
+    const cookieStore = await cookies();
+    const uuid = cookieStore.get('stub_user_id')?.value;
+    if (!uuid) return;
+
+    try {
+        await adminDb.collection("users").doc(uuid).set({
+            lastSeenAt: new Date()
+        }, { merge: true });
+    } catch (e) {
+        console.error("Failed to track visit", e);
+    }
+}

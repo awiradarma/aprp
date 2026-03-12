@@ -4,6 +4,7 @@ import "./globals.css";
 import { cookies } from "next/headers";
 import type { Language } from "@/lib/i18n";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import TrafficTracker from "@/components/TrafficTracker";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,6 +34,7 @@ export default async function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
+        <TrafficTracker />
         <LanguageSwitcher currentLang={lang} />
       </body>
     </html>
