@@ -98,6 +98,12 @@ const mockDb = {
 
                         if (op === "==" && actualValue === value) {
                             results.push({ id: docId, data: () => docData });
+                        } else if (op === "!=" && actualValue !== value) {
+                            results.push({ id: docId, data: () => docData });
+                        } else if (op === ">" && actualValue > value) {
+                            results.push({ id: docId, data: () => docData });
+                        } else if (op === "<" && actualValue < value) {
+                            results.push({ id: docId, data: () => docData });
                         }
                     }
                     return {

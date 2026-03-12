@@ -28,16 +28,39 @@ export default async function AdminPage({ params }: Props) {
         ...doc.data()
     })) as any[];
 
-    // Quick stats for the dashboard
-    const sevenDaysAgo = new Date();
-    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-    const staleUsersSnap = await adminDb.collection("users")
-        .where("lastSeenAt", "<", sevenDaysAgo)
-        .get();
+    // Analytics Data
+    const now = new Date();
+    const oneDayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+    const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+
+    const [
+        totalUsers,
+        activeUsers24h,
+        staleUsers,
+        totalPrayers,
+        answeredPrayers,
+        publicPrayers,
+        privatePrayers,
+        totalIntercessions
+    ] = await Promise.all([
+        adminDb.collection("users").count().get(),
+        adminDb.collection("users").where("lastSeenAt", ">", oneDayAgo).get(),
+        adminDb.collection("users").where("lastSeenAt", "<", sevenDaysAgo).get(),
+        adminDb.collection("prayers").count().get(),
+        adminDb.collection("prayers").where("answeredAt", "!=", null).get(),
+        adminDb.collection("prayers").where("visibility", "==", "public").get(),
+        adminDb.collection("prayers").where("visibility", "==", "private").get(),
+        adminDb.collection("user_intercessions").count().get()
+    ]);
+
+    const totalPrayersCount = totalPrayers.data().count;
+    const intercessionRate = totalPrayersCount > 0
+        ? ((totalIntercessions.data().count / totalPrayersCount) * 100).toFixed(1)
+        : 0;
 
     return (
-        <div className="min-h-screen bg-gray-50 p-8">
-            <div className="max-w-4xl mx-auto">
+        <div className="min-h-screen bg-gray-50 p-8 pb-24">
+            <div className="max-w-5xl mx-auto">
                 <header className="mb-12 flex justify-between items-center">
                     <div>
                         <h1 className="text-3xl font-black text-gray-900">🛡️ Admin Shield</h1>
@@ -49,28 +72,104 @@ export default async function AdminPage({ params }: Props) {
                             const { cleanupAbandonedSessionsAction } = await import("@/app/actions/admin");
                             await cleanupAbandonedSessionsAction(key);
                         }}>
-                            <button className="bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 px-4 py-2 rounded-xl text-sm font-bold transition-colors">
-                                🧹 Clean Stale Sessions ({staleUsersSnap.size})
+                            <button className="bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 px-4 py-2 rounded-xl text-sm font-bold transition-colors shadow-sm">
+                                🧹 Clean Stale Sessions ({staleUsers.size})
                             </button>
                         </form>
-                        <div className="bg-red-100 text-red-700 px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
+                        <div className="bg-red-100 text-red-700 px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest shadow-sm border border-red-200">
                             Secure Session
                         </div>
                     </div>
                 </header>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
                     <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
-                        <span className="text-xs font-bold text-gray-400 uppercase tracking-widest block mb-2">Flagged Content</span>
+                        <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-1">Total Souls</span>
+                        <div className="text-3xl font-black text-blue-600">{totalUsers.data().count}</div>
+                        <div className="text-[10px] text-green-600 font-bold mt-1">+{activeUsers24h.size} active (24h)</div>
+                    </div>
+                    <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
+                        <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-1">Total Prayers</span>
+                        <div className="text-3xl font-black text-indigo-600">{totalPrayersCount}</div>
+                        <div className="text-[10px] text-indigo-500/60 font-bold mt-1">{answeredPrayers.size} answered</div>
+                    </div>
+                    <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm border-l-4 border-l-orange-500">
+                        <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-1">Flagged Content</span>
                         <div className="text-3xl font-black text-orange-600">{flaggedPrayers.length}</div>
+                        <div className="text-[10px] text-orange-500/60 font-bold mt-1">Pending review</div>
                     </div>
                     <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
-                        <span className="text-xs font-bold text-gray-400 uppercase tracking-widest block mb-2">Stale Sessions</span>
-                        <div className="text-3xl font-black text-gray-600">{staleUsersSnap.size}</div>
+                        <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-1">Engagement</span>
+                        <div className="text-3xl font-black text-pink-600">{intercessionRate}%</div>
+                        <div className="text-[10px] text-pink-500/60 font-bold mt-1">{totalIntercessions.data().count} intercessions</div>
                     </div>
-                    <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
-                        <span className="text-xs font-bold text-gray-400 uppercase tracking-widest block mb-2">Total Prayers</span>
-                        <div className="text-3xl font-black text-blue-600">{(await adminDb.collection("prayers").count().get()).data().count}</div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                    <div className="md:col-span-2 bg-white p-8 rounded-3xl border border-gray-100 shadow-sm">
+                        <h2 className="text-sm font-black text-gray-900 uppercase tracking-widest mb-6 border-b pb-4">Platform Insights</h2>
+                        <div className="grid grid-cols-2 gap-8">
+                            <div>
+                                <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">Privacy Breakdown</h3>
+                                <div className="space-y-3">
+                                    <div className="flex items-center justify-between text-xs">
+                                        <span className="text-gray-500">Public</span>
+                                        <span className="font-bold text-gray-900">{publicPrayers.size}</span>
+                                    </div>
+                                    <div className="h-1.5 w-full bg-gray-100 rounded-full overflow-hidden">
+                                        <div
+                                            className="h-full bg-blue-500"
+                                            style={{ width: `${(publicPrayers.size / (totalPrayersCount || 1)) * 100}%` }}
+                                        />
+                                    </div>
+                                    <div className="flex items-center justify-between text-xs">
+                                        <span className="text-gray-500">Private/Shadowed</span>
+                                        <span className="font-bold text-gray-900">{privatePrayers.size}</span>
+                                    </div>
+                                    <div className="h-1.5 w-full bg-gray-100 rounded-full overflow-hidden">
+                                        <div
+                                            className="h-full bg-purple-500"
+                                            style={{ width: `${(privatePrayers.size / (totalPrayersCount || 1)) * 100}%` }}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">Core Health</h3>
+                                <div className="space-y-4">
+                                    <div className="bg-gray-50 p-3 rounded-xl">
+                                        <div className="text-[10px] text-gray-400 font-bold uppercase">Stale Session Ratio</div>
+                                        <div className="text-xl font-black text-gray-700">
+                                            {((staleUsers.size / (totalUsers.data().count || 1)) * 100).toFixed(0)}%
+                                        </div>
+                                    </div>
+                                    <div className="bg-gray-50 p-3 rounded-xl">
+                                        <div className="text-[10px] text-gray-400 font-bold uppercase">Conversion</div>
+                                        <div className="text-xl font-black text-gray-700">
+                                            {intercessionRate}% <span className="text-[10px] text-gray-400">interceded</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="bg-gradient-to-br from-indigo-600 to-blue-700 p-8 rounded-3xl shadow-xl text-white">
+                        <h2 className="text-sm font-black uppercase tracking-widest mb-6 opacity-80">Admin Tips</h2>
+                        <ul className="space-y-4 text-sm font-medium opacity-90">
+                            <li className="flex gap-3">
+                                <span>🧹</span>
+                                <p>Running cleanup affects users with no prayer history and 7+ days inactivity.</p>
+                            </li>
+                            <li className="flex gap-3">
+                                <span>🛡️</span>
+                                <p>Approve prayers to move them from 'Shadowed' (Private) to Public.</p>
+                            </li>
+                            <li className="flex gap-3">
+                                <span>🌍</span>
+                                <p>Discovery feeds exclusively show 'Clean' moderation status content.</p>
+                            </li>
+                        </ul>
                     </div>
                 </div>
 
