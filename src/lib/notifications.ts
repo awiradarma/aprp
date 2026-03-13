@@ -16,6 +16,14 @@ export async function sendPushNotification(userId: string, title: string, body: 
                 title,
                 body,
             },
+            apns: {
+                payload: {
+                    aps: {
+                        badge: 1,
+                        sound: "default",
+                    },
+                },
+            },
             token: fcmToken,
         };
 
