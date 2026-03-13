@@ -53,6 +53,12 @@ This is a personal ministry tool designed to connect believers across geographic
 - **Tagging System** — Categorize prayers with hashtags (e.g., #Family, #Healing) and filter your dashboard by topic.
 - **Premium PDF Export** — Elegant, printable serif-style journal export for personal records (replacing raw JSON data).
 
+### 📱 Progressive Web App & Offline Experience (Phase 8)
+- **Native Installability** — "Add to Home Screen" support with premium 4K unified icons and iOS-specific splash screens.
+- **Offline Resilience** — Full offline access to your prayer journal via Firestore IndexedDB persistence.
+- **Local Journaling Queue** — Submit follow-up notes while offline; they auto-sync once connectivity is restored.
+- **FCM Push Notifications** — Real-time alerts when someone prays for you, featuring the **App Badging API** for unread counts on the home screen icon.
+
 ---
 
 ## Technical Details
@@ -163,8 +169,8 @@ Integrated tool available in the **Admin Shield**. It identifies and removes ano
 
 | Feature | Notes |
 |---|---|
-| 🔔 **Push Notifications (FCM)** | Notify users when someone prays for their request |
 | 🔐 **Real email/password auth** | Optional Firebase Auth login to persist sessions across devices |
+| 🛡️ **Zero-Knowledge Vault** | Client-side AES-GCM encryption for absolute privacy of personal notes |
 | 🔍 **Advanced Search** | Full-text search across all public prayers |
 | 🚨 **Crisis detection** | NLP to flag emergency markers and surface resources |
-| �️ **Marker clustering** | Optimization for high-traffic regions on the world map |
+| 📍 **Marker clustering** | Optimization for high-traffic regions on the world map |

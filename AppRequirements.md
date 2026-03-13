@@ -63,10 +63,10 @@ Phase 7: Personal Prayer Journaling
 [ ] Implement an "Export My Journal" feature (JSON/PDF) for anonymous data sovereignty.
 
 Phase 8: Progressive Web App & Offline Experience
-[ ] Scaffolding: Implement `manifest.json` and basic Service Worker for installability.
-[ ] Offline Ready: Configure Firestore persistence and offline caching for the My Prayers section to allow journaling without connectivity.
-[ ] Home Screen Integration: Optimized icons and splash screens for premium iOS/Android feel.
-[ ] Push Notifications: Connect FCM to the Service Worker for daily intercession reminders and status updates.
+[x] Scaffolding: Implement `manifest.json` and basic Service Worker for installability.
+[x] Offline Ready: Configure Firestore persistence and offline caching for the My Prayers section to allow journaling without connectivity.
+[x] Home Screen Integration: Optimized icons and splash screens for premium iOS/Android feel.
+[x] Push Notifications: Connect FCM to the Service Worker for daily intercession reminders and status updates.
 
 Phase 9: Zero-Knowledge Privacy (The Vault)
 [ ] Implement client-side encryption (AES-GCM) for "Private" prayers using the Recovery Key as the encryption seed.
