@@ -68,6 +68,12 @@ Phase 8: Progressive Web App & Offline Experience
 [ ] Home Screen Integration: Optimized icons and splash screens for premium iOS/Android feel.
 [ ] Push Notifications: Connect FCM to the Service Worker for daily intercession reminders and status updates.
 
+Phase 9: Zero-Knowledge Privacy (The Vault)
+[ ] Implement client-side encryption (AES-GCM) for "Private" prayers using the Recovery Key as the encryption seed.
+[ ] Create a "Seal My Journal" toggle that encrypts existing private entries and clears plain-text server versions.
+[ ] Implement UI disclaimers regarding the "Zero-Knowledge" trade-offs (e.g., no AI crisis detection, no password resets).
+[ ] Ensure Public/Unlisted prayers continue to use the standard moderation pipeline for community safety.
+
 4. Agent Behavioral Rules (.agent/rules/*.md)
 The following constraints must be active for all agent interactions:
 Strict Privacy: "Never store or display raw latitude/longitude coordinates. All geo-data must be jittered or snapped to a Geohash grid before reaching the database."
