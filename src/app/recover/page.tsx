@@ -29,9 +29,14 @@ export default async function RecoverPage() {
                                 required
                                 pattern="[a-zA-Z0-9]{12}"
                                 maxLength={12}
-                                className="w-full font-mono tracking-widest text-center uppercase bg-gray-50 text-gray-800 rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
-                                placeholder="ABC123XYZ456"
+                                autoCapitalize="none"
+                                autoCorrect="off"
+                                className="w-full font-mono tracking-widest text-center bg-gray-50 text-gray-800 rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
+                                placeholder="aBc123XyZ456"
                             />
+                            <p className="text-[10px] text-center text-gray-400 mt-2 font-medium">
+                                Note: Recovery keys are case-sensitive.
+                            </p>
                         </div>
 
                         <button
