@@ -74,6 +74,22 @@ export async function intercedeAction(formData: FormData) {
             prayedCount: FieldValue.increment(1),
         });
 
+        // 5. Notify Requester
+        try {
+            const prayerDoc = await adminDb.collection("prayers").doc(prayerId).get();
+            const requesterId = prayerDoc.data()?.requesterId;
+            if (requesterId && requesterId !== uuid) {
+                const { sendPushNotification } = await import("@/lib/notifications");
+                await sendPushNotification(
+                    requesterId,
+                    "Someone just prayed for you!",
+                    "A fellow believer has interceded for your request. You're not alone."
+                );
+            }
+        } catch (pushErr) {
+            console.error("Failed to send push notification:", pushErr);
+        }
+
         revalidatePath(`/p/${prayerId}`);
     } catch (error) {
         console.error("Error interceding:", error);

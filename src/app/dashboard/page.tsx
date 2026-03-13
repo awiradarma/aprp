@@ -3,6 +3,7 @@ import { adminDb } from "@/lib/firebase/server";
 import { getOrCreateRecoveryCode } from "../actions/recovery";
 import Link from "next/link";
 import { getTranslations, type Language } from "@/lib/i18n";
+import PushNotificationConsent from "@/components/PushNotificationConsent";
 
 export default async function DashboardPage(props: { searchParams: Promise<{ tag?: string }> }) {
     const searchParams = await props.searchParams;
@@ -65,6 +66,8 @@ export default async function DashboardPage(props: { searchParams: Promise<{ tag
                         </Link>
                     </div>
                 </section>
+
+                <PushNotificationConsent t={t} />
 
                 {/* Tag Filters */}
                 {allTags.length > 0 && (

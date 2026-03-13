@@ -17,9 +17,32 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Anonymous Prayer",
+  title: "PrayNow | Anonymous Prayer",
   description: "Share your prayer — request, praise, or thanksgiving — anonymously with believers around the world.",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "PrayNow",
+    startupImage: [
+      "/splash.png",
+    ],
+  },
+  formatDetection: {
+    telephone: false,
+  },
 };
+
+export const viewport = {
+  themeColor: "#2563eb",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
+
+import PWARegistration from "@/components/PWARegistration";
+import OfflineIndicator from "@/components/OfflineIndicator";
 
 export default async function RootLayout({
   children,
@@ -36,6 +59,8 @@ export default async function RootLayout({
         {children}
         <TrafficTracker />
         <LanguageSwitcher currentLang={lang} />
+        <PWARegistration />
+        <OfflineIndicator />
       </body>
     </html>
   );
