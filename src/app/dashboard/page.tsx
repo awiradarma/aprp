@@ -59,7 +59,13 @@ export default async function DashboardPage(props: { searchParams: Promise<{ tag
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 items-center">
                         <div className="flex-1 bg-blue-50 text-blue-900 border border-blue-200 p-4 rounded-xl text-center w-full">
-                            <span className="font-mono text-2xl font-bold tracking-[0.2em]">{recoveryCode || "N/A"}</span>
+                            {recoveryCode ? (
+                                <span className="font-mono text-2xl font-bold tracking-[0.2em]">{recoveryCode}</span>
+                            ) : (
+                                <Link href="/recover" className="text-sm font-bold text-blue-600 hover:underline tracking-tight">
+                                    Already have a key? Tap here to recover your journal
+                                </Link>
+                            )}
                         </div>
                         <Link href="/dashboard/export" className="whitespace-nowrap bg-gray-900 text-white px-6 py-4 rounded-xl font-bold text-sm hover:bg-gray-800 transition-colors">
                             {t.dashboard.exportJournal}
