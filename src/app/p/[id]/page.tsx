@@ -8,6 +8,7 @@ import PrayerOwnerActions from "@/components/PrayerOwnerActions";
 import IntercessionMap from "@/components/IntercessionMap";
 import { fetchIntercessionLocations } from "@/app/actions/intercessions";
 import { getTranslations, type Language } from "@/lib/i18n";
+import JournalTimeline from "@/components/JournalTimeline";
 
 export default async function PrayerPage({ params }: { params: Promise<{ id: string }> }) {
     const resolvedParams = await params;
@@ -20,7 +21,18 @@ export default async function PrayerPage({ params }: { params: Promise<{ id: str
     let prayer = null;
     try {
         const doc = await adminDb.collection("prayers").doc(id).get();
-        if (doc.exists) prayer = doc.data();
+        if (doc.exists) {
+            const data = doc.data() as any;
+            prayer = {
+                ...data,
+                createdAt: data.createdAt?.toDate ? data.createdAt.toDate() : data.createdAt,
+                answeredAt: data.answeredAt?.toDate ? data.answeredAt.toDate() : data.answeredAt,
+                followUps: (data.followUps || []).map((f: any) => ({
+                    ...f,
+                    createdAt: f.createdAt?.toDate ? f.createdAt.toDate() : f.createdAt
+                }))
+            };
+        }
     } catch (err) {
         console.error("Firebase error", err);
         return (
@@ -54,7 +66,7 @@ export default async function PrayerPage({ params }: { params: Promise<{ id: str
         );
     }
 
-    const isAnswered = !!(prayer.answeredAt);
+    const isAnswered = !!(prayer.isAnswered || prayer.answeredAt);
 
     let hasInterceded = false;
     if (uuid && !isOwner) {
@@ -137,6 +149,18 @@ export default async function PrayerPage({ params }: { params: Promise<{ id: str
                                 </div>
                             </div>
                         </main>
+
+                        {/* Journaling Section (Owner Only) */}
+                        {isOwner && (
+                            <div className="pt-4">
+                                <JournalTimeline
+                                    prayerId={id}
+                                    followUps={prayer.followUps}
+                                    t={t}
+                                    lang={lang}
+                                />
+                            </div>
+                        )}
                     </div>
 
                     {/* Right Column: Interaction & Community (4/12 wings) */}

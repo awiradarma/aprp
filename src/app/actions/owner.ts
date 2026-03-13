@@ -23,6 +23,7 @@ export async function markAnsweredAction(formData: FormData) {
 
     await adminDb.collection("prayers").doc(prayerId).update({
         answeredAt: new Date(),
+        isAnswered: true
     });
 
     revalidatePath(`/p/${prayerId}`);

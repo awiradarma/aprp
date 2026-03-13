@@ -42,10 +42,16 @@ This is a personal ministry tool designed to connect believers across geographic
 
 ### 🛡️ Privacy, Localization & Moderation (Phase 4)
 - **Privacy Levels** — choose between `Public` (discoverable), `Unlisted` (direct link only), and `Private` (owner only)
-- **Multi-language Support** — Full UI localization for English, Indonesian, Spanish, French, German, and Portuguese
-- **AI-Powered Moderation** — Automated detection of spam, ads, and suspicious patterns. Offensive content is rejected; ambiguous content is shadowed for review
+- **Multi-language Support** — Full UI localization for English, Indonesian, Spanish, French, German, Portuguese, and Korean
+- **AI-Powered Moderation** — Automated detection of spam, ads, and suspicious patterns using Gemini 2.5 Flash
 - **Admin Shield** — Secure dashboard with human review, **Traffic Flow (24h/7d/30d) analytics**, and abandoned session cleanup
-- **Activity Tracking** — Global `lastSeenAt` tracking for all users (excluding admin activities) to monitor platform health
+- **Activity Tracking** — Global `lastSeenAt` tracking for all users to monitor platform health
+
+### 📖 Personal Prayer Journaling (Phase 7)
+- **Journal Timeline** — Add follow-up notes and journal entries to your prayers to track how God is moving over time.
+- **Prayer Insights** — Statistics dashboard showing Answered Rate, Community Impact (intercessions received), and Consistency Streaks.
+- **Tagging System** — Categorize prayers with hashtags (e.g., #Family, #Healing) and filter your dashboard by topic.
+- **Premium PDF Export** — Elegant, printable serif-style journal export for personal records (replacing raw JSON data).
 
 ---
 
@@ -53,15 +59,18 @@ This is a personal ministry tool designed to connect believers across geographic
 
 ### 🔐 AI Moderation Logic
 Every prayer submission passes through a content analysis engine (`src/lib/moderation.ts`):
-1. **Reject**: Obvious commercial spam is rejected with a localized error message.
-2. **Flag**: Suspicious patterns (links, WhatsApp numbers) are automatically set to `Private` and queued for review.
-3. **Allow**: Clean prayers proceed with their intended visibility.
+1. **Fast Pass**: Regex-based keyword matching with word boundaries to catch obvious spam while avoiding false positives (e.g., "product" vs "productive").
+2. **Deep Pass**: Gemini 2.5 Flash analysis for semantic intent, multi-language support, and ambiguous patterns.
+3. **Decision Types**:
+    - **REJECT**: Commercial spam or explicit content.
+    - **FLAG**: Suspicious patterns set to `Private` for admin review.
+    - **ALLOW**: Clean prayers proceed with intended visibility.
 
 ### 🛡️ Admin Shield Dashboard
 Accessible via a secret key stored in Firestore: `/admin/[secret-key]`.
 - **Platform Insights**: Tri-column analytics showing Privacy Breakdown, Rolling Traffic Flow, and Core Health (Conversion & Stale Ratios).
 - **Engagement Monitoring**: Real-time tracking of the "Intercession Rate" (Intercessions vs. Prayers).
-- **Session Cleanup**: One-click detection and removal of "stale" sessions (inactive for 7+ days with no prayer/intercession history).
+- **Session Cleanup**: One-click detection and removal of "stale" sessions (inactive for 7+ days).
 
 ---
 
@@ -73,28 +82,28 @@ src/
 │   ├── layout.tsx              # Root layout: fonts, metadata, global TrafficTracker
 │   ├── page.tsx                # Homepage: prayer form + global map
 │   ├── discover/page.tsx       # Browse all prayers
-│   ├── dashboard/page.tsx      # User's personal prayer history
-│   ├── recover/page.tsx        # Restore session via recovery code
-│   ├── p/[id]/page.tsx         # Individual prayer detail page
+│   ├── dashboard/
+│   │   ├── page.tsx            # User's personal prayer history & insights
+│   │   └── export/page.tsx     # Printable PDF-ready journal export
+│   ├── p/[id]/page.tsx         # Individual prayer detail page (includes Journal)
 │   ├── admin/[key]/page.tsx    # Admin Shield Hub (Insights & Moderation)
 │   └── actions/
 │       ├── admin.ts            # Admin-only actions (approve, delete, cleanup)
 │       ├── auth.ts             # User registration + activity tracking
-│       ├── prayer.ts           # Submit prayer (includes AI moderation)
+│       ├── prayer.ts           # Submit prayer + Add Follow-up
 │       ├── intercede.ts        # "I Prayed" action
-│       ├── map.ts              # Fetch markers for global map
-│       ├── discover.ts         # Fetch prayers for Discover page
 │       ├── owner.ts            # Edit + Mark as Answered
-│       └── recovery.ts        # Session recovery logic
+│       └── recovery.ts         # Session recovery logic
 ├── components/
 │   ├── GlobalMap.tsx           # Homepage world map (MapLibre)
-│   ├── TrafficTracker.tsx      # Silent activity tracking (Client Component)
+│   ├── JournalTimeline.tsx     # Chronological log for prayer updates (Owner only)
 │   ├── IntercessionMap.tsx     # Per-prayer intercessor mini-map
-│   ├── ShareButton.tsx         # Web Share API / clipboard fallback
-│   └── PrayerOwnerActions.tsx  # Owner-only edit and answered controls
+│   ├── PrayerOwnerActions.tsx  # Owner-only edit and answered controls
+│   └── ShareButton.tsx         # Web Share API / clipboard fallback
 └── lib/
     ├── firebase/server.ts      # Firebase Admin SDK connection
-    ├── moderation.ts           # NLP/Pattern-based moderation logic
+    ├── moderation.ts           # NLP/Pattern-based moderation logic (Word boundary aware)
+    ├── i18n.ts                 # Full UI localization (multi-language)
     └── geo.ts                  # Privacy-preserving geo-utilities
 ```
 
@@ -156,6 +165,6 @@ Integrated tool available in the **Admin Shield**. It identifies and removes ano
 |---|---|
 | 🔔 **Push Notifications (FCM)** | Notify users when someone prays for their request |
 | 🔐 **Real email/password auth** | Optional Firebase Auth login to persist sessions across devices |
-| 🔍 **Search & Filters** | Search by keyword, filter by topic tag or proximity |
+| 🔍 **Advanced Search** | Full-text search across all public prayers |
 | 🚨 **Crisis detection** | NLP to flag emergency markers and surface resources |
 | �️ **Marker clustering** | Optimization for high-traffic regions on the world map |

@@ -57,6 +57,8 @@ export async function submitPrayerAction(prevState: PrayerState, formData: FormD
         }
 
         const visibilityInput = (formData.get("visibility") as string) || "public";
+        const tagsInput = (formData.get("tags") as string) || "";
+        const tags = tagsInput.split(",").map(t => t.trim()).filter(t => t !== "");
 
         // AI Moderation Check
         const { analyzePrayerContent } = await import("@/lib/moderation");
@@ -81,6 +83,9 @@ export async function submitPrayerAction(prevState: PrayerState, formData: FormD
             jitteredCoords,
             geohash,
             visibility,
+            tags,
+            isAnswered: false,
+            followUps: [],
             moderation: {
                 status: moderationStatus,
                 flaggedReason: modResult.decision === "FLAG" ? modResult.reason : null,
@@ -94,6 +99,46 @@ export async function submitPrayerAction(prevState: PrayerState, formData: FormD
     } catch (error: any) {
         if (error.message === "NEXT_REDIRECT") throw error;
         console.error("Error saving prayer:", error);
+        return { error: error.message };
+    }
+}
+
+export async function addFollowUpAction(prevState: PrayerState, formData: FormData): Promise<PrayerState> {
+    const cookieStore = await cookies();
+    const uuid = cookieStore.get('stub_user_id')?.value;
+    const prayerId = formData.get("prayerId") as string;
+    const note = formData.get("note") as string;
+
+    if (!uuid || !prayerId || !note) {
+        return { error: "invalidRequest" };
+    }
+
+    try {
+        const prayerRef = adminDb.collection("prayers").doc(prayerId);
+        const prayerDoc = await prayerRef.get();
+
+        if (!prayerDoc.exists) return { error: "notFound" };
+        const prayerData = prayerDoc.data();
+
+        if (prayerData?.requesterId !== uuid) return { error: "unauthorized" };
+
+        const followUp = {
+            id: nanoid(8),
+            text: note,
+            createdAt: new Date(),
+            type: 'update'
+        };
+
+        await prayerRef.update({
+            followUps: (prayerData?.followUps || []).concat(followUp)
+        });
+
+        const { revalidatePath } = await import("next/cache");
+        revalidatePath(`/p/${prayerId}`);
+
+        return { success: true };
+    } catch (error: any) {
+        console.error("Error adding follow-up:", error);
         return { error: error.message };
     }
 }

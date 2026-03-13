@@ -56,7 +56,10 @@ export async function analyzePrayerContent(text: string): Promise<ModerationResp
         "winner", "lottery", "ray-ban"
     ];
 
-    if (rejectKeywords.some(kw => lowerText.includes(kw))) {
+    const isMatch = (keywords: string[], content: string) =>
+        keywords.some(kw => new RegExp(`\\b${kw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i').test(content));
+
+    if (isMatch(rejectKeywords, text)) {
         return { decision: "REJECT", reason: "commercialContent" };
     }
 
@@ -68,14 +71,14 @@ export async function analyzePrayerContent(text: string): Promise<ModerationResp
     // Modern "Fast Pass" for obvious commercial patterns
     const flagKeywords = [
         "invest", "opportunity", "contact me", "whatsapp", "telegram",
-        "dm for", "service", "guaranteed", "google", "your website",
-        "sales", "business", "company", "product", "software", "app",
+        "dm for", "guaranteed", "google", "your website",
+        "sales", "product", "software", "app",
         "search index", "search engine", "seo", "marketing", "promotion",
         "advertising", "search ranking", "website design", "online presence",
         "digital marketing", "web development", "app development", "software development"
     ];
 
-    if (flagKeywords.some(kw => lowerText.includes(kw))) {
+    if (isMatch(flagKeywords, text)) {
         return { decision: "FLAG", reason: "suspiciousPatterns" };
     }
 

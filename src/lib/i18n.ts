@@ -3,10 +3,10 @@ export type Language = 'en' | 'pt' | 'es' | 'fr' | 'ko' | 'id';
 export type TranslationSchema = {
     appName: string;
     nav: { discover: string; myPrayers: string; restoreSession: string; privacyFaq: string; newRequest: string; };
-    home: { subtitle: string; prayerLabel: string; prayerPlaceholder: string; locationLabel: string; locationPlaceholder: string; locationPrivacy: string; submit: string; anonNote: string; privacyLabel: string; visibilityPublic: string; visibilityUnlisted: string; visibilityPrivate: string; visibilityPublicDesc: string; visibilityUnlistedDesc: string; visibilityPrivateDesc: string; };
-    prayer: { prayerRequest: string; answeredPrayer: string; prayed: string; intercessors: string; locationPlaceholder: string; locationPrivacyNote: string; iPrayed: string; youPrayed: string; shareUrl: string; shareCopied: string; shareFailed: string; translateContent: string; yourRequest: string; editText: string; saveChanges: string; cancel: string; saving: string; prayerUpdated: string; markAnswered: string; prayerAnswered: string; privateNotice: string; accessDenied: string; privateDeniedMessage: string; };
+    home: { subtitle: string; prayerLabel: string; prayerPlaceholder: string; locationLabel: string; locationPlaceholder: string; locationPrivacy: string; submit: string; anonNote: string; privacyLabel: string; visibilityPublic: string; visibilityUnlisted: string; visibilityPrivate: string; visibilityPublicDesc: string; visibilityUnlistedDesc: string; visibilityPrivateDesc: string; tagsLabel: string; tagsPlaceholder: string; tagsHint: string; };
+    prayer: { prayerRequest: string; answeredPrayer: string; prayed: string; intercessors: string; locationPlaceholder: string; locationPrivacyNote: string; iPrayed: string; youPrayed: string; shareUrl: string; shareCopied: string; shareFailed: string; translateContent: string; yourRequest: string; editText: string; saveChanges: string; cancel: string; saving: string; prayerUpdated: string; markAnswered: string; prayerAnswered: string; privateNotice: string; accessDenied: string; privateDeniedMessage: string; journalTitle: string; addNote: string; notePlaceholder: string; };
     discover: { title: string; subtitle: string; joinPrayer: string; loadMore: string; loading: string; endOfFeed: string; noPrayers: string; noPrayersSub: string; submitRequest: string; praying: string; justNow: string; mAgo: string; hAgo: string; dAgo: string; };
-    dashboard: { title: string; prayerKeyTitle: string; prayerKeyDesc: string; learnAnonymity: string; yourRequests: string; requestsFollowed: string; noRequests: string; noIntercessions: string; view: string; active: string; };
+    dashboard: { title: string; prayerKeyTitle: string; prayerKeyDesc: string; learnAnonymity: string; yourRequests: string; requestsFollowed: string; noRequests: string; noIntercessions: string; view: string; active: string; insightsTitle: string; answeredRate: string; prayerImpact: string; consistencyStreak: string; exportJournal: string; };
     recover: { title: string; subtitle: string; prayerKey: string; button: string; backHome: string; howAnonymity: string; };
     faq: { title: string; subtitle: string; questions: { q: string; a: string; }[]; errors: { tooShort: string; tooLong: string; invalidContent: string; tooManyLinks: string; repetition: string; justUrl: string; required: string; commercialContent: string; }; };
 };
@@ -39,7 +39,10 @@ const translations = {
             visibilityPrivate: 'Private',
             visibilityPublicDesc: 'Visible to everyone in the Discover feed.',
             visibilityUnlistedDesc: 'Hidden from Discover. Accessible only via direct link.',
-            visibilityPrivateDesc: 'Only you can view this. Restricted even with a link.'
+            visibilityPrivateDesc: 'Only you can view this. Restricted even with a link.',
+            tagsLabel: 'Tags / Categories (Optional)',
+            tagsPlaceholder: 'e.g. Family, Health, Finance',
+            tagsHint: 'Separate multiple tags with commas.'
         },
         prayer: {
             prayerRequest: 'Anonymous Prayer',
@@ -64,10 +67,13 @@ const translations = {
             prayerAnswered: '🙌 This prayer was answered!',
             privateNotice: '🔒 This is a private prayer. Only you can see it.',
             accessDenied: 'Access Denied',
-            privateDeniedMessage: 'This prayer is private. You need the owner\'s session to view it.'
+            privateDeniedMessage: 'This prayer is private. You need the owner\'s session to view it.',
+            journalTitle: 'Prayer Journal',
+            addNote: '📝 Add Journal Entry',
+            notePlaceholder: 'How has this situation evolved?'
         },
         discover: { title: 'Global Prayers', subtitle: 'Prayers from around the world', joinPrayer: 'Join in Prayer →', loadMore: 'Load More Prayers', loading: 'Loading…', endOfFeed: "You've seen all {n} prayers. 🙏", noPrayers: 'No prayers yet', noPrayersSub: 'Be the first to submit a prayer.', submitRequest: 'Submit a prayer →', praying: '{n} praying', justNow: 'just now', mAgo: '{n}m ago', hAgo: '{n}h ago', dAgo: '{n}d ago' },
-        dashboard: { title: 'My Prayers', prayerKeyTitle: '🔑 Your Prayer Key', prayerKeyDesc: 'This is your only connection to your prayers — like a key to an anonymous journal. Save it somewhere safe. If you ever switch devices or clear your browser, enter this key to restore your prayers.', learnAnonymity: 'Learn how anonymity works →', yourRequests: 'Your Prayers', requestsFollowed: 'Prayers You Interceded For', noRequests: 'No prayers submitted yet.', noIntercessions: "You haven't interceded for any prayers yet.", view: 'View', active: 'Active' },
+        dashboard: { title: 'My Prayers', prayerKeyTitle: '🔑 Your Prayer Key', prayerKeyDesc: 'This is your only connection to your prayers — like a key to an anonymous journal. Save it somewhere safe. If you ever switch devices or clear your browser, enter this key to restore your prayers.', learnAnonymity: 'Learn how anonymity works →', yourRequests: 'Your Prayers', requestsFollowed: 'Prayers You Interceded For', noRequests: 'No prayers submitted yet.', noIntercessions: "You haven't interceded for any prayers yet.", view: 'View', active: 'Active', insightsTitle: 'Prayer Insights', answeredRate: 'Answered Rate', prayerImpact: 'Intercessory Impact', consistencyStreak: 'Consistency Streak', exportJournal: '📥 Export My Journal' },
         recover: { title: '🔑 Restore Your Session', subtitle: 'Enter your Prayer Key to pick up right where you left off — on any device.', prayerKey: 'Prayer Key', button: 'Recover My Profile', backHome: 'Back to Home', howAnonymity: 'How does anonymity work?' },
         faq: {
             title: 'Privacy & FAQ', subtitle: 'How anonymity works, what we store, and why you can trust this space.',
@@ -116,7 +122,10 @@ const translations = {
             visibilityPrivate: 'Privado',
             visibilityPublicDesc: 'Visível para todos no feed Descobrir.',
             visibilityUnlistedDesc: 'Oculto do Descobrir. Acessível apenas via link direto.',
-            visibilityPrivateDesc: 'Apenas você pode ver isso. Restrito mesmo com um link.'
+            visibilityPrivateDesc: 'Apenas você pode ver isso. Restrito mesmo com um link.',
+            tagsLabel: 'Etiquetas / Categorias (Opcional)',
+            tagsPlaceholder: 'ex: Família, Saúde, Finanças',
+            tagsHint: 'Separe várias etiquetas com vírgulas.'
         },
         prayer: {
             prayerRequest: 'Oração Anônima',
@@ -141,10 +150,13 @@ const translations = {
             prayerAnswered: '🙌 Esta oração foi respondida!',
             privateNotice: '🔒 Esta é uma oração privada. Apenas você pode vê-la.',
             accessDenied: 'Acesso Negado',
-            privateDeniedMessage: 'Esta oração é privada. Você precisa da sessão do proprietário para visualizá-la.'
+            privateDeniedMessage: 'Esta oração é privada. Você precisa da sessão do proprietário para visualizá-la.',
+            journalTitle: 'Diário de Oração',
+            addNote: '📝 Adicionar entrada no diário',
+            notePlaceholder: 'Como esta situação evoluiu?'
         },
         discover: { title: 'Orações Globais', subtitle: 'Orações de todo o mundo', joinPrayer: 'Juntar-se em Oração →', loadMore: 'Carregar Mais Orações', loading: 'Carregando…', endOfFeed: 'Você viu todas as {n} orações. 🙏', noPrayers: 'Nenhuma oração ainda', noPrayersSub: 'Seja o primeiro a enviar uma oração.', submitRequest: 'Enviar uma oração →', praying: '{n} orando', justNow: 'agora mesmo', mAgo: 'há {n}min', hAgo: 'há {n}h', dAgo: 'há {n}d' },
-        dashboard: { title: 'Minhas Orações', prayerKeyTitle: '🔑 Sua Chave de Oração', prayerKeyDesc: 'Esta é sua única conexão com suas orações — como a chave de um diário anônimo. Guarde-a em lugar seguro.', learnAnonymity: 'Saiba como o anonimato funciona →', yourRequests: 'Suas Orações', requestsFollowed: 'Orações pelas quais Você Intercedeu', noRequests: 'Nenhuma oração enviada ainda.', noIntercessions: 'Você ainda não intercedeu por nenhuma oração.', view: 'Ver', active: 'Ativo' },
+        dashboard: { title: 'Minhas Orações', prayerKeyTitle: '🔑 Sua Chave de Oração', prayerKeyDesc: 'Esta é sua única conexão com suas orações — como a chave de um diário anônimo. Guarde-a em lugar seguro.', learnAnonymity: 'Saiba como o anonimato funciona →', yourRequests: 'Suas Orações', requestsFollowed: 'Orações pelas quais Você Intercedeu', noRequests: 'Nenhuma oração enviada ainda.', noIntercessions: 'Você ainda não intercedeu por nenhuma oração.', view: 'Ver', active: 'Ativo', insightsTitle: 'Estatísticas de Oração', answeredRate: 'Taxa de Respostas', prayerImpact: 'Impacto da Intercessão', consistencyStreak: 'Sequência de Oração', exportJournal: '📥 Exportar Meu Diário' },
         recover: { title: '🔑 Restaurar Sua Sessão', subtitle: 'Insira sua Chave de Oração para continuar de onde parou — em qualquer dispositivo.', prayerKey: 'Chave de Oração', button: 'Recuperar Meu Perfil', backHome: 'Voltar ao Início', howAnonymity: 'Como o anonimato funciona?' },
         faq: {
             title: 'Privacidade & FAQ', subtitle: 'Como o anonimato funciona, o que armazenamos e por que você pode confiar neste espaço.',
@@ -193,7 +205,10 @@ const translations = {
             visibilityPrivate: 'Privado',
             visibilityPublicDesc: 'Visible para todos en el feed Descubrir.',
             visibilityUnlistedDesc: 'Oculto de Descubrir. Accesible solo mediante enlace directo.',
-            visibilityPrivateDesc: 'Solo tú puedes ver esto. Restringido incluso con un enlace.'
+            visibilityPrivateDesc: 'Solo tú puedes ver esto. Restringido incluso con un enlace.',
+            tagsLabel: 'Etiquetas / Categorías (Opcional)',
+            tagsPlaceholder: 'ej: Familia, Salud, Finanzas',
+            tagsHint: 'Separa varias etiquetas con comas.'
         },
         prayer: {
             prayerRequest: 'Oración Anónima',
@@ -218,10 +233,13 @@ const translations = {
             prayerAnswered: '🙌 ¡Esta oración fue respondida!',
             privateNotice: '🔒 Esta es una oración privada. Solo tú puedes verla.',
             accessDenied: 'Acceso Denegado',
-            privateDeniedMessage: 'Esta oración es privada. Necesitas la sesión del propietario para verla.'
+            privateDeniedMessage: 'Esta oración es privada. Necesitas la sesión del propietario para verla.',
+            journalTitle: 'Diario de Oración',
+            addNote: '📝 Añadir entrada al diario',
+            notePlaceholder: '¿Cómo ha evolucionado esta situación?'
         },
         discover: { title: 'Oraciones Globales', subtitle: 'Oraciones de todo el mundo', joinPrayer: 'Unirse en Oración →', loadMore: 'Cargar Más Oraciones', loading: 'Cargando…', endOfFeed: 'Has visto todas las {n} oraciones. 🙏', noPrayers: 'No hay oraciones aún', noPrayersSub: 'Sé el primero en enviar una oración.', submitRequest: 'Enviar una oración →', praying: '{n} orando', justNow: 'ahora mismo', mAgo: 'hace {n}min', hAgo: 'hace {n}h', dAgo: 'hace {n}d' },
-        dashboard: { title: 'Mis Oraciones', prayerKeyTitle: '🔑 Tu Clave de Oración', prayerKeyDesc: 'Esta es tu única conexión con tus oraciones — como la llave de un diario anónimo. Guárdala en un lugar seguro.', learnAnonymity: 'Aprende cómo funciona el anonimato →', yourRequests: 'Tus Oraciones', requestsFollowed: 'Oraciones por las que Intercediste', noRequests: 'No hay oraciones enviadas aún.', noIntercessions: 'Aún no has intercedido por ninguna oración.', view: 'Ver', active: 'Activo' },
+        dashboard: { title: 'Mis Oraciones', prayerKeyTitle: '🔑 Tu Clave de Oración', prayerKeyDesc: 'Esta es tu única conexión con tus oraciones — como la llave de un diario anónimo. Guárdala en un lugar seguro.', learnAnonymity: 'Aprende cómo funciona el anonimato →', yourRequests: 'Tus Oraciones', requestsFollowed: 'Oraciones por las que Intercediste', noRequests: 'No hay oraciones enviadas aún.', noIntercessions: 'Aún no has intercedido por ninguna oración.', view: 'Ver', active: 'Activo', insightsTitle: 'Estadísticas de Oración', answeredRate: 'Tasa de Respuestas', prayerImpact: 'Impacto de Intercesión', consistencyStreak: 'Racha de Oración', exportJournal: '📥 Exportar Mi Diario' },
         recover: { title: '🔑 Restaurar Tu Sesión', subtitle: 'Ingresa tu Clave de Oración para continuar donde lo dejaste — en cualquier dispositivo.', prayerKey: 'Clave de Oración', button: 'Recuperar Mi Perfil', backHome: 'Volver al Inicio', howAnonymity: '¿Cómo funciona el anonimato?' },
         faq: {
             title: 'Privacidad & FAQ', subtitle: 'Cómo funciona el anonimato, qué almacenamos y por qué puedes confiar en este espacio.',
@@ -270,7 +288,10 @@ const translations = {
             visibilityPrivate: 'Privé',
             visibilityPublicDesc: 'Visible par tout le monde dans le flux Découvrir.',
             visibilityUnlistedDesc: 'Masqué de Découvrir. Accessible uniquement via un lien direct.',
-            visibilityPrivateDesc: 'Vous seul pouvez voir ceci. Restreint même avec un lien.'
+            visibilityPrivateDesc: 'Vous seul pouvez voir ceci. Restreint même avec un lien.',
+            tagsLabel: 'Étiquettes / Catégories (Optionnel)',
+            tagsPlaceholder: 'ex: Famille, Santé, Finances',
+            tagsHint: 'Séparez les étiquettes par des virgules.'
         },
         prayer: {
             prayerRequest: 'Prière Anonyme',
@@ -295,10 +316,13 @@ const translations = {
             prayerAnswered: '🙌 Cette prière a été exaucée !',
             privateNotice: '🔒 Ceci est une prière privée. Vous seul pouvez la voir.',
             accessDenied: 'Accès Refusé',
-            privateDeniedMessage: 'Cette prière est privée. Vous avez besoin de la session du propriétaire pour la voir.'
+            privateDeniedMessage: 'Cette prière est privée. Vous avez besoin de la session du propriétaire pour la voir.',
+            journalTitle: 'Journal de Prière',
+            addNote: '📝 Ajouter une note au journal',
+            notePlaceholder: 'Comment cette situation a-t-elle évolué ?'
         },
         discover: { title: 'Prières Mondiales', subtitle: 'Prières du monde entier', joinPrayer: 'Joindre en Prière →', loadMore: 'Charger Plus de Prières', loading: 'Chargement…', endOfFeed: 'Vous avez vu toutes les {n} prières. 🙏', noPrayers: 'Aucune prière encore', noPrayersSub: 'Soyez le premier à soumettre une prière.', submitRequest: 'Soumettre une prière →', praying: '{n} en prière', justNow: 'à l\'instant', mAgo: 'il y a {n}min', hAgo: 'il y a {n}h', dAgo: 'il y a {n}j' },
-        dashboard: { title: 'Mes Prières', prayerKeyTitle: '🔑 Votre Clé de Prière', prayerKeyDesc: 'C\'est votre unique lien avec vos prières — comme la clé d\'un journal anonyme. Conservez-la en lieu sûr.', learnAnonymity: 'Comment fonctionne l\'anonymat →', yourRequests: 'Vos Prières', requestsFollowed: 'Prières pour lesquelles vous avez Intercédé', noRequests: 'Aucune prière soumise pour l\'instant.', noIntercessions: 'Vous n\'avez encore intercédé pour aucune prière.', view: 'Voir', active: 'Actif' },
+        dashboard: { title: 'Mes Prières', prayerKeyTitle: '🔑 Votre Clé de Prière', prayerKeyDesc: 'C\'est votre unique lien avec vos prières — comme la clé d\'un journal anonyme. Conservez-la en lieu sûr.', learnAnonymity: 'Comment fonctionne l\'anonymat →', yourRequests: 'Vos Prières', requestsFollowed: 'Prières pour lesquelles vous avez Intercédé', noRequests: 'Aucune prière soumise pour l\'instant.', noIntercessions: 'Vous n\'avez encore intercédé pour aucune prière.', view: 'Voir', active: 'Actif', insightsTitle: 'Statistiques de Prière', answeredRate: 'Taux de Réponses', prayerImpact: 'Impact de l\'Intercession', consistencyStreak: 'Série de prières', exportJournal: '📥 Exporter mon Journal' },
         recover: { title: '🔑 Restaurer Votre Session', subtitle: 'Entrez votre Clé de Prière pour reprendre là où vous étiez — sur n\'importe quel appareil.', prayerKey: 'Clé de Prière', button: 'Récupérer Mon Profil', backHome: 'Retour à l\'accueil', howAnonymity: 'Comment fonctionne l\'anonymat ?' },
         faq: {
             title: 'Confidentialité & FAQ', subtitle: 'Comment fonctionne l\'anonymat, ce que nous stockons et pourquoi vous pouvez faire confiance à cet espace.',
@@ -347,7 +371,10 @@ const translations = {
             visibilityPrivate: '비공개',
             visibilityPublicDesc: '발견 피드에서 모든 사람에게 보입니다.',
             visibilityUnlistedDesc: '발견 피드에서 숨겨집니다. 직접 링크를 통해서만 접근 가능합니다.',
-            visibilityPrivateDesc: '귀하만 이 기도를 볼 수 있습니다. 링크가 있어도 접근이 제한됩니다.'
+            visibilityPrivateDesc: '귀하만 이 기도를 볼 수 있습니다. 링크가 있어도 접근이 제한됩니다.',
+            tagsLabel: '태그 / 카테고리 (선택사항)',
+            tagsPlaceholder: '예: 가족, 건강, 재정',
+            tagsHint: '여러 태그는 쉼표로 구분하세요.'
         },
         prayer: {
             prayerRequest: '익명 기도',
@@ -372,10 +399,13 @@ const translations = {
             prayerAnswered: '🙌 이 기도가 응답되었습니다!',
             privateNotice: '🔒 이것은 비공개 기도입니다. 귀하만 볼 수 있습니다.',
             accessDenied: '접근 거부',
-            privateDeniedMessage: '이 기도는 비공개입니다. 보려면 소유자의 세션이 필요합니다.'
+            privateDeniedMessage: '이 기도는 비공개입니다. 보려면 소유자의 세션이 필요합니다.',
+            journalTitle: '기도 일기',
+            addNote: '📝 일기 쓰기',
+            notePlaceholder: '기도 응답이나 상황의 변화를 기록하세요.'
         },
         discover: { title: '전 세계 기도', subtitle: '전 세계의 기도', joinPrayer: '기도에 함께하기 →', loadMore: '더 많은 기도 불러오기', loading: '불러오는 중…', endOfFeed: '모든 {n}개의 기도를 확인하셨습니다. 🙏', noPrayers: '아직 기도가 없습니다', noPrayersSub: '첫 번째로 기도를 제출해 보세요.', submitRequest: '기도 제출하기 →', praying: '{n}명 기도 중', justNow: '방금', mAgo: '{n}분 전', hAgo: '{n}시간 전', dAgo: '{n}일 전' },
-        dashboard: { title: '내 기도', prayerKeyTitle: '🔑 기도 열쇠', prayerKeyDesc: '이것은 기도와의 유일한 연결고리입니다 — 익명 일기의 열쇠와 같습니다. 안전한 곳에 보관하세요.', learnAnonymity: '익명성이 작동하는 방식 알아보기 →', yourRequests: '내 기도', requestsFollowed: '중보한 기도', noRequests: '아직 제출된 기도가 없습니다.', noIntercessions: '아직 중보한 기도가 없습니다.', view: '보기', active: '활성' },
+        dashboard: { title: '내 기도', prayerKeyTitle: '🔑 기도 열쇠', prayerKeyDesc: '이것은 기도와의 유일한 연결고리입니다 — 익명 일기의 열쇠와 같습니다. 안전한 곳에 보관하세요.', learnAnonymity: '익명성이 작동하는 방식 알아보기 →', yourRequests: '내 기도', requestsFollowed: '중보한 기도', noRequests: '아직 제출된 기도가 없습니다.', noIntercessions: '아직 중보한 기도가 없습니다.', view: '보기', active: '활성', insightsTitle: '기도 통계', answeredRate: '응답률', prayerImpact: '중보 영향력', consistencyStreak: '기도 연속일수', exportJournal: '📥 내 일기 내보내기' },
         recover: { title: '🔑 세션 복원', subtitle: '기도 열쇠를 입력하여 어느 기기에서든 이어서 사용하세요.', prayerKey: '기도 열쇠', button: '프로필 복구', backHome: '홈으로 돌아가기', howAnonymity: '익명성은 어떻게 작동하나요?' },
         faq: {
             title: '개인정보 & FAQ', subtitle: '익명성이 작동하는 방식, 저장하는 것, 그리고 이 공간을 신뢰할 수 있는 이유.',
@@ -424,7 +454,10 @@ const translations = {
             visibilityPrivate: 'Privat',
             visibilityPublicDesc: 'Dapat dilihat oleh semua orang di feed Temukan.',
             visibilityUnlistedDesc: 'Disembunyikan dari Temukan. Hanya dapat diakses melalui tautan langsung.',
-            visibilityPrivateDesc: 'Hanya Anda yang dapat melihat doa ini. Akses dibatasi meskipun memiliki tautan.'
+            visibilityPrivateDesc: 'Hanya Anda yang dapat melihat doa ini. Akses dibatasi meskipun memiliki tautan.',
+            tagsLabel: 'Tag / Kategori (Opsional)',
+            tagsPlaceholder: 'mis. Keluarga, Kesehatan, Keuangan',
+            tagsHint: 'Pisahkan beberapa tag dengan koma.'
         },
         prayer: {
             prayerRequest: 'Doa Anonim',
@@ -449,10 +482,13 @@ const translations = {
             prayerAnswered: '🙌 Doa ini telah terjawab!',
             privateNotice: '🔒 Ini adalah doa privat. Hanya Anda yang dapat melihatnya.',
             accessDenied: 'Akses Ditolak',
-            privateDeniedMessage: 'Doa ini bersifat privat. Anda memerlukan sesi pemilik untuk melihatnya.'
+            privateDeniedMessage: 'Doa ini bersifat privat. Anda memerlukan sesi pemilik untuk melihatnya.',
+            journalTitle: 'Jurnal Doa',
+            addNote: '📝 Tambah Catatan Jurnal',
+            notePlaceholder: 'Bagaimana situasi ini berkembang?'
         },
         discover: { title: 'Doa Global', subtitle: 'Doa-doa dari seluruh dunia', joinPrayer: 'Bergabung dalam Doa →', loadMore: 'Muat Lebih Banyak Doa', loading: 'Memuat…', endOfFeed: 'Anda telah melihat semua {n} doa. 🙏', noPrayers: 'Belum ada doa', noPrayersSub: 'Jadilah yang pertama mengirimkan doa.', submitRequest: 'Kirim doa →', praying: '{n} sedang berdoa', justNow: 'baru saja', mAgo: '{n}m lalu', hAgo: '{n}j lalu', dAgo: '{n}h lalu' },
-        dashboard: { title: 'Doa Saya', prayerKeyTitle: '🔑 Kunci Doa Anda', prayerKeyDesc: 'Ini adalah satu-satunya koneksi Anda dengan doa-doa Anda — seperti kunci jurnal anonim. Simpan di tempat yang aman.', learnAnonymity: 'Pelajari cara anonimitas bekerja →', yourRequests: 'Doa Anda', requestsFollowed: 'Doa yang Anda Syafaatkan', noRequests: 'Belum ada doa yang dikirim.', noIntercessions: 'Anda belum mendoakan doa apapun.', view: 'Lihat', active: 'Aktif' },
+        dashboard: { title: 'Doa Saya', prayerKeyTitle: '🔑 Kunci Doa Anda', prayerKeyDesc: 'Ini adalah satu-satunya koneksi Anda dengan doa-doa Anda — seperti kunci jurnal anonim. Simpan di tempat yang aman.', learnAnonymity: 'Pelajari cara anonimitas bekerja →', yourRequests: 'Doa Anda', requestsFollowed: 'Doa yang Anda Syafaatkan', noRequests: 'Belum ada doa yang dikirim.', noIntercessions: 'Anda belum mendoakan doa apapun.', view: 'Lihat', active: 'Aktif', insightsTitle: 'Wawasan Doa', answeredRate: 'Tingkat Terjawab', prayerImpact: 'Dampak Syafaat', consistencyStreak: 'Rantai Konsistensi', exportJournal: '📥 Ekspor Jurnal Saya' },
         recover: { title: '🔑 Pulihkan Sesi Anda', subtitle: 'Masukkan Kunci Doa Anda untuk melanjutkan dari mana Anda tinggalkan — di perangkat mana pun.', prayerKey: 'Kunci Doa', button: 'Pulihkan Profil Saya', backHome: 'Kembali ke Beranda', howAnonymity: 'Bagaimana anonimitas bekerja?' },
         faq: {
             title: 'Privasi & FAQ', subtitle: 'Cara kerja anonimitas, apa yang kami simpan, dan mengapa Anda dapat mempercayai ruang ini.',

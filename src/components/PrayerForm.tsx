@@ -63,6 +63,20 @@ export default function PrayerForm({ t }: { t: T }) {
                 <p className="text-xs text-gray-500 mt-1">{t.home.locationPrivacy}</p>
             </div>
 
+            <div>
+                <label htmlFor="tags" className="block text-sm font-medium text-gray-700 mb-1">
+                    {t.home.tagsLabel}
+                </label>
+                <input
+                    type="text"
+                    name="tags"
+                    id="tags"
+                    className="w-full bg-white text-gray-800 rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
+                    placeholder={t.home.tagsPlaceholder}
+                />
+                <p className="text-[10px] text-gray-400 mt-1">{t.home.tagsHint}</p>
+            </div>
+
             <div className="pt-2">
                 <label className="block text-sm font-medium text-gray-700 mb-3">
                     {t.home.privacyLabel}
