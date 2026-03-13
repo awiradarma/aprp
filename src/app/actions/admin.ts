@@ -12,12 +12,22 @@ async function verifyAdminKey(key: string) {
 
 export async function approvePrayerAction(key: string, prayerId: string) {
     await verifyAdminKey(key);
-    await adminDb.collection("prayers").doc(prayerId).update({
+
+    const prayerRef = adminDb.collection("prayers").doc(prayerId);
+    const prayerDoc = await prayerRef.get();
+
+    if (!prayerDoc.exists) throw new Error("Prayer not found");
+
+    const data = prayerDoc.data();
+    const finalVisibility = data?.moderation?.requestedVisibility || "public";
+
+    await prayerRef.update({
         "moderation.status": "clean",
         "moderation.reviewed": true,
         "moderation.reviewedAt": new Date(),
-        visibility: "public"
+        visibility: finalVisibility
     });
+
     revalidatePath("/discover");
     revalidatePath("/");
 }

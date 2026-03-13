@@ -229,15 +229,23 @@ export default async function AdminPage({ params }: Props) {
                                         "{prayer.text}"
                                     </h3>
                                 </div>
-                                <div className="bg-orange-50 text-orange-600 px-3 py-1 rounded-lg text-xs font-bold whitespace-nowrap">
-                                    {prayer.moderation?.flaggedReason || "Flagged"}
+                                <div className="flex gap-2">
+                                    <div className="bg-orange-50 text-orange-600 px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-tight shadow-sm border border-orange-100">
+                                        {prayer.moderation?.flaggedReason || "Flagged"}
+                                    </div>
+                                    <div className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-tight shadow-sm border ${prayer.moderation?.requestedVisibility === "unlisted" ? "bg-amber-50 text-amber-600 border-amber-100" :
+                                            prayer.moderation?.requestedVisibility === "private" ? "bg-purple-50 text-purple-600 border-purple-100" :
+                                                "bg-blue-50 text-blue-600 border-blue-100"
+                                        }`}>
+                                        Intent: {prayer.moderation?.requestedVisibility || "Public"}
+                                    </div>
                                 </div>
                             </div>
 
                             <div className="flex gap-2 mt-6">
                                 <form action={approvePrayerAction.bind(null, key, prayer.id)}>
-                                    <button className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl text-sm font-bold transition-colors">
-                                        Approve & Public
+                                    <button className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl text-sm font-bold transition-colors shadow-sm">
+                                        Approve as {prayer.moderation?.requestedVisibility?.toUpperCase() || "PUBLIC"}
                                     </button>
                                 </form>
                                 <form action={dismissPrayerAction.bind(null, key, prayer.id)}>

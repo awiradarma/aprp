@@ -42,17 +42,19 @@ Phase 3: Discovery and Global Mapping
 Phase 4: Notifications and Multi-Language
 [ ] Set up FCM Service Worker for web push notifications.
 [ ] Implement optional email collection for "Magic Link" recovery and update alerts.
-[ ] Integrate react-i18next for UI translations stored as JSON artifacts.
+[x] Integrate react-i18next for UI translations stored as JSON artifacts.
 [ ] Add AI-powered dynamic content translation for requests.
 
 Phase 5: Automated Moderation (Shadow Ban)
-[ ] Integrate AWS Bedrock Guardrails or GCP Natural Language API for content filtering.
-[ ] Implement offensive content detection for all visibility levels (Public, Unlisted) to block or shadow-ban inappropriate requests.
-[ ] Implement "Shadow Ban" logic: flagged content is hidden from global discovery but remains visible to the requester.
+[x] Integrate AWS Bedrock Guardrails or GCP Natural Language API for content filtering.
+[x] Implement offensive content detection for all visibility levels (Public, Unlisted) to block or shadow-ban inappropriate requests.
+[x] Implement "Shadow Ban" logic: flagged content is hidden from global discovery but remains visible to the requester.
+[x] **Privacy Fix**: Preserve `requestedVisibility` during flagging to prevent accidental "Public" leakage upon approval.
+[x] **Admin UX**: Display intended visibility in Admin Shield to inform moderator decisions.
 
 Phase 6: Support & Community
-[ ] Implement a support contact mechanism (contact form or dedicated support link).
-[ ] Update FAQ with "How to contact us" and comprehensive "Usage Guidelines" for the community.
+[x] Implement a support contact mechanism (contact form or dedicated support link).
+[x] Update FAQ with "How to contact us" and comprehensive "Usage Guidelines" for the community.
 
 4. Agent Behavioral Rules (.agent/rules/*.md)
 The following constraints must be active for all agent interactions:

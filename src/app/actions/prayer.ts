@@ -68,6 +68,7 @@ export async function submitPrayerAction(prevState: PrayerState, formData: FormD
 
         const moderationStatus = modResult.decision === "FLAG" ? "flagged" : "clean";
         const visibility = modResult.decision === "FLAG" ? "private" : visibilityInput;
+        const requestedVisibility = visibilityInput; // Always preserve the user's intent
 
         const prayerId = nanoid(16);
 
@@ -83,6 +84,7 @@ export async function submitPrayerAction(prevState: PrayerState, formData: FormD
             moderation: {
                 status: moderationStatus,
                 flaggedReason: modResult.decision === "FLAG" ? modResult.reason : null,
+                requestedVisibility,
                 reviewed: false
             }
         });
