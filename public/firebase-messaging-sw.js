@@ -11,26 +11,15 @@ firebase.initializeApp({
 const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage((payload) => {
-    console.log('[firebase-messaging-sw.js] Received background message ', payload);
+    console.log('[firebase-messaging-sw.js] Background message received:', payload);
 
-    // Only show manual notification if the 'notification' object is missing
-    // (meaning the OS hasn't handled it automatically)
-    if (!payload.notification) {
-        // Use data payload since we've silenced the automatic notification block
-        const notificationTitle = payload.data?.title || 'New Prayer Update';
-        const notificationOptions = {
-            body: payload.data?.body || '',
-            icon: '/icon-192x192.png'
-        };
-        self.registration.showNotification(notificationTitle, notificationOptions);
-    } else {
-        console.log('Notification handled by OS');
-    }
+    // On iOS 16.4+ PWAs, if the server sends a 'notification' block 
+    // AND a valid 'aps' badge count, the OS handles the UI automatically.
+    // We don't need to call registration.showNotification() anymore.
 
-    // Set app badge if supported
+    // We only keep this listener active to allow the badge to be updated 
+    // if the OS doesn't do it automatically.
     if ('setAppBadge' in self.navigator) {
-        self.navigator.setAppBadge(1).catch((error) => {
-            console.error('Error setting app badge:', error);
-        });
+        self.navigator.setAppBadge(1).catch(() => { });
     }
 });
