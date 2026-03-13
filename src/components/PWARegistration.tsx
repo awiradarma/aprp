@@ -16,6 +16,11 @@ export default function PWARegistration() {
                 );
             });
         }
+
+        // Clear app badge if supported when user enters the app
+        if ('clearAppBadge' in navigator) {
+            (navigator as any).clearAppBadge().catch((err: any) => console.error(err));
+        }
     }, []);
 
     return null;

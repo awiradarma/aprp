@@ -19,4 +19,11 @@ messaging.onBackgroundMessage((payload) => {
     };
 
     self.registration.showNotification(notificationTitle, notificationOptions);
+
+    // Set app badge if supported
+    if ('setAppBadge' in self.navigator) {
+        self.navigator.setAppBadge(1).catch((error) => {
+            console.error('Error setting app badge:', error);
+        });
+    }
 });
