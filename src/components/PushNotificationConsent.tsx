@@ -50,7 +50,6 @@ export default function PushNotificationConsent({ t }: { t: any }) {
         }
     };
 
-    if (permission === 'granted' && !isSuccess) return null;
     if (permission === 'denied') return null;
     if (permission === 'unsupported') return null;
 
