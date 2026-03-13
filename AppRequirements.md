@@ -56,6 +56,18 @@ Phase 6: Support & Community
 [x] Implement a support contact mechanism (contact form or dedicated support link).
 [x] Update FAQ with "How to contact us" and comprehensive "Usage Guidelines" for the community.
 
+Phase 7: Personal Prayer Journaling
+[ ] Implement "Follow-up Notes" for prayers to track the journey from request to answer.
+[ ] Add personal categories/tags for prayers (#Family, #Health, etc.) to allow filtering.
+[ ] Build a "Prayer Insights" dashboard in the My Prayers section showing answered rates and consistency streaks.
+[ ] Implement an "Export My Journal" feature (JSON/PDF) for anonymous data sovereignty.
+
+Phase 8: Progressive Web App & Offline Experience
+[ ] Scaffolding: Implement `manifest.json` and basic Service Worker for installability.
+[ ] Offline Ready: Configure Firestore persistence and offline caching for the My Prayers section to allow journaling without connectivity.
+[ ] Home Screen Integration: Optimized icons and splash screens for premium iOS/Android feel.
+[ ] Push Notifications: Connect FCM to the Service Worker for daily intercession reminders and status updates.
+
 4. Agent Behavioral Rules (.agent/rules/*.md)
 The following constraints must be active for all agent interactions:
 Strict Privacy: "Never store or display raw latitude/longitude coordinates. All geo-data must be jittered or snapped to a Geohash grid before reaching the database."
