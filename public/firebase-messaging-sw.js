@@ -15,7 +15,9 @@ messaging.onBackgroundMessage((payload) => {
     const notificationTitle = payload.notification?.title || 'New Prayer Update';
     const notificationOptions = {
         body: payload.notification?.body || '',
-        icon: '/icon-192x192.png'
+        icon: '/icon-192x192.png',
+        tag: 'praynow-alert',
+        renotify: true
     };
 
     self.registration.showNotification(notificationTitle, notificationOptions);

@@ -16,7 +16,21 @@ export async function sendPushNotification(userId: string, title: string, body: 
                 title,
                 body,
             },
+            data: {
+                title,
+                body,
+            },
+            android: {
+                notification: {
+                    tag: "praynow-alert",
+                },
+            },
             apns: {
+                headers: {
+                    "apns-priority": "10",
+                    "apns-push-type": "alert",
+                    "apns-collapse-id": "praynow-alert",
+                },
                 payload: {
                     aps: {
                         badge: 1,
