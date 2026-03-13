@@ -12,7 +12,7 @@ export async function sendPushNotification(userId: string, title: string, body: 
         }
 
         const message = {
-            notification: {
+            data: {
                 title,
                 body,
             },
@@ -21,6 +21,7 @@ export async function sendPushNotification(userId: string, title: string, body: 
                     aps: {
                         badge: 1,
                         sound: "default",
+                        "content-available": 1
                     },
                 },
             },

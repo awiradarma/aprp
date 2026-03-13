@@ -12,10 +12,15 @@ const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage((payload) => {
     console.log('[firebase-messaging-sw.js] Received background message ', payload);
-    // We no longer call self.registration.showNotification here because 
-    // the 'notification' object in the FCM payload triggers the OS banner automatically.
-    // This prevents double-notifications on iOS.
-    console.log('Background message handled by OS');
+
+    // Use data payload since we've silenced the automatic notification block
+    const notificationTitle = payload.data?.title || 'New Prayer Update';
+    const notificationOptions = {
+        body: payload.data?.body || '',
+        icon: '/icon-192x192.png'
+    };
+
+    self.registration.showNotification(notificationTitle, notificationOptions);
 
     // Set app badge if supported
     if ('setAppBadge' in self.navigator) {
