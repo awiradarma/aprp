@@ -17,6 +17,13 @@ export async function sendPushNotification(userId: string, title: string, body: 
                 title,
                 body,
             },
+            data: {
+                title,
+                body,
+            },
+            android: {
+                priority: "high" as const,
+            },
             apns: {
                 headers: {
                     "apns-priority": "10",
@@ -26,8 +33,6 @@ export async function sendPushNotification(userId: string, title: string, body: 
                     aps: {
                         badge: 1,
                         sound: "default",
-                        "content-available": 1,
-                        "mutable-content": 1,
                     },
                 },
             },

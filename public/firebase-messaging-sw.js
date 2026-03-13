@@ -13,12 +13,17 @@ const messaging = firebase.messaging();
 messaging.onBackgroundMessage((payload) => {
     console.log('[firebase-messaging-sw.js] Background message received:', payload);
 
-    // On iOS 16.4+ PWAs, if the server sends a 'notification' block 
-    // AND a valid 'aps' badge count, the OS handles the UI automatically.
-    // We don't need to call registration.showNotification() anymore.
+    // Manual display fallback with deduplication tag
+    const title = payload.data?.title || payload.notification?.title || 'New Prayer Update';
+    const options = {
+        body: payload.data?.body || payload.notification?.body || '',
+        icon: '/icon-192x192.png',
+        tag: 'praynow-alert' // The key to preventing double-notifications
+    };
 
-    // We only keep this listener active to allow the badge to be updated 
-    // if the OS doesn't do it automatically.
+    self.registration.showNotification(title, options);
+
+    // Update badge
     if ('setAppBadge' in self.navigator) {
         self.navigator.setAppBadge(1).catch(() => { });
     }
