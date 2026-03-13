@@ -13,14 +13,19 @@ const messaging = firebase.messaging();
 messaging.onBackgroundMessage((payload) => {
     console.log('[firebase-messaging-sw.js] Received background message ', payload);
 
-    // Use data payload since we've silenced the automatic notification block
-    const notificationTitle = payload.data?.title || 'New Prayer Update';
-    const notificationOptions = {
-        body: payload.data?.body || '',
-        icon: '/icon-192x192.png'
-    };
-
-    self.registration.showNotification(notificationTitle, notificationOptions);
+    // Only show manual notification if the 'notification' object is missing
+    // (meaning the OS hasn't handled it automatically)
+    if (!payload.notification) {
+        // Use data payload since we've silenced the automatic notification block
+        const notificationTitle = payload.data?.title || 'New Prayer Update';
+        const notificationOptions = {
+            body: payload.data?.body || '',
+            icon: '/icon-192x192.png'
+        };
+        self.registration.showNotification(notificationTitle, notificationOptions);
+    } else {
+        console.log('Notification handled by OS');
+    }
 
     // Set app badge if supported
     if ('setAppBadge' in self.navigator) {
