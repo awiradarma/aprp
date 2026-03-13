@@ -11,18 +11,16 @@ firebase.initializeApp({
 const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage((payload) => {
-    console.log('[SW] Background message:', payload);
-
-    const title = payload.notification?.title || payload.data?.title || 'New Prayer Update';
-    const options = {
-        body: payload.notification?.body || payload.data?.body || '',
-        icon: '/icon-192x192.png',
-        tag: 'praynow-notification', // This collapses duplicates into one
-        renotify: true
+    console.log('[firebase-messaging-sw.js] Received background message ', payload);
+    const notificationTitle = payload.notification?.title || 'New Prayer Update';
+    const notificationOptions = {
+        body: payload.notification?.body || '',
+        icon: '/icon-192x192.png'
     };
 
-    self.registration.showNotification(title, options);
+    self.registration.showNotification(notificationTitle, notificationOptions);
 
+    // Set app badge if supported
     if ('setAppBadge' in self.navigator) {
         self.navigator.setAppBadge(1).catch(() => { });
     }

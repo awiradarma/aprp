@@ -2,7 +2,6 @@ import { adminDb } from "@/lib/firebase/server";
 import { getMessaging } from "firebase-admin/messaging";
 
 export async function sendPushNotification(userId: string, title: string, body: string) {
-    console.log(`Attempting to send push to user: ${userId}`);
     try {
         const userDoc = await adminDb.collection("users").doc(userId).get();
         const fcmToken = userDoc.data()?.fcmToken;
@@ -17,18 +16,7 @@ export async function sendPushNotification(userId: string, title: string, body: 
                 title,
                 body,
             },
-            data: {
-                title,
-                body,
-            },
-            android: {
-                priority: "high" as const,
-            },
             apns: {
-                headers: {
-                    "apns-priority": "10",
-                    "apns-push-type": "alert",
-                },
                 payload: {
                     aps: {
                         badge: 1,
