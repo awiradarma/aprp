@@ -198,7 +198,7 @@ export default async function PrayerPage({ params }: { params: Promise<{ id: str
                                         </div>
 
                                         <button type="submit"
-                                            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-5 px-8 rounded-2xl font-black text-xl transition-all shadow-xl shadow-blue-200 hover:shadow-blue-300 active:scale-[0.97] group">
+                                            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-5 px-8 rounded-2xl font-black text-xl transition-all shadow-xl shadow-blue-200 hover:shadow-blue-300 active:scale-[0.97] group disabled:opacity-50 disabled:cursor-not-allowed">
                                             {t.prayer.iPrayed}
                                             <span className="inline-block ml-3 group-hover:translate-x-1 transition-all duration-300">→</span>
                                         </button>
