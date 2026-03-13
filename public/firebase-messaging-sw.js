@@ -10,21 +10,34 @@ firebase.initializeApp({
 
 const messaging = firebase.messaging();
 
-messaging.onBackgroundMessage((payload) => {
-    console.log('[firebase-messaging-sw.js] Background message received:', payload);
+// Raw Push Listener (The most reliable for iOS 16.4+)
+self.addEventListener('push', (event) => {
+    console.log('[SW] Push Received');
+    let data = {};
+    try {
+        data = event.data.json();
+    } catch (e) {
+        console.log('[SW] Push was not JSON, likely handled by OS notification block');
+        return;
+    }
 
-    // Manual display fallback with deduplication tag
-    const title = payload.data?.title || payload.notification?.title || 'New Prayer Update';
+    const title = data.notification?.title || data.data?.title || 'New Prayer Update';
     const options = {
-        body: payload.data?.body || payload.notification?.body || '',
+        body: data.notification?.body || data.data?.body || '',
         icon: '/icon-192x192.png',
-        tag: 'praynow-alert' // The key to preventing double-notifications
+        badge: '/icon-192x192.png',
+        tag: 'praynow-alert'
     };
 
-    self.registration.showNotification(title, options);
+    event.waitUntil(
+        Promise.all([
+            self.registration.showNotification(title, options),
+            'setAppBadge' in self.navigator ? self.navigator.setAppBadge(1) : Promise.resolve()
+        ])
+    );
+});
 
-    // Update badge
-    if ('setAppBadge' in self.navigator) {
-        self.navigator.setAppBadge(1).catch(() => { });
-    }
+// Firebase background listener (Backup)
+messaging.onBackgroundMessage((payload) => {
+    console.log('[Firebase SW] Background message incoming', payload);
 });

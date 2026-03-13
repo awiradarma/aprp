@@ -1,4 +1,4 @@
-const CACHE_NAME = 'praynow-v6';
+const CACHE_NAME = 'praynow-v7';
 const ASSETS_TO_CACHE = [
     '/',
     '/manifest.json',
