@@ -1,5 +1,5 @@
-const CACHE_NAME = 'praynow-v17';
-const DYNAMIC_CACHE_NAME = 'praynow-dynamic-v17';
+const CACHE_NAME = 'praynow-v18';
+const DYNAMIC_CACHE_NAME = 'praynow-dynamic-v18';
 const ASSETS_TO_CACHE = [
     '/',
     '/manifest.json',
@@ -32,11 +32,18 @@ self.addEventListener('fetch', (event) => {
     if (event.request.method !== 'GET') return;
 
     event.respondWith(
-        fetch(event.request)
+        Promise.race([
+            fetch(event.request),
+            new Promise((_, reject) => setTimeout(() => reject(new Error('Network timeout')), 4000))
+        ])
             .then((networkResponse) => {
                 const responseToCache = networkResponse.clone();
                 caches.open(DYNAMIC_CACHE_NAME).then((cache) => {
                     if (event.request.url.startsWith('http')) {
+                        // DO NOT CACHE Next.js prefetch payloads. They freeze the router offline.
+                        if (event.request.headers.get('Next-Router-Prefetch') === '1') {
+                            return;
+                        }
                         cache.put(event.request, responseToCache);
                     }
                 });
