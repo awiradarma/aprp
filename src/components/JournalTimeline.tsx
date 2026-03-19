@@ -34,21 +34,44 @@ export default function JournalTimeline({
     // Handle Offline Sync
     useEffect(() => {
         const syncPending = async () => {
-            const pending = localStorage.getItem(`pending_note_${prayerId}`);
-            if (pending && navigator.onLine) {
-                const formData = new FormData();
-                formData.append('prayerId', prayerId);
-                formData.append('note', pending);
+            if (!navigator.onLine) return;
 
-                try {
-                    // We can't easily call formAction from here in a way that handles state
-                    // so we just notify the user it's ready to sync or call a fetch.
-                    // For now, let's keep it simple: the form will show an error if offline.
-                } catch (e) {
-                    console.error("Sync failed", e);
+            let didSync = false;
+            const keysToSync = [];
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key?.startsWith(`pending_note_${prayerId}_`)) {
+                    keysToSync.push(key);
                 }
             }
+
+            for (const key of keysToSync) {
+                const pending = localStorage.getItem(key);
+                if (pending) {
+                    const formData = new FormData();
+                    formData.append('prayerId', prayerId);
+                    formData.append('note', pending);
+                    try {
+                        const result = await addFollowUpAction({}, formData);
+                        if (result.success) {
+                            localStorage.removeItem(key);
+                            didSync = true;
+                        } else {
+                            console.error("Failed to sync offline note", result.error);
+                        }
+                    } catch (e) {
+                        console.error("Sync failed", e);
+                    }
+                }
+            }
+
+            if (didSync) {
+                window.location.reload();
+            }
         };
+
+        // Try syncing right away when the component mounts in case we reconnected earlier
+        syncPending();
 
         window.addEventListener('online', syncPending);
         return () => window.removeEventListener('online', syncPending);
