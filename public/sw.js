@@ -1,5 +1,5 @@
-const CACHE_NAME = 'praynow-v16';
-const DYNAMIC_CACHE_NAME = 'praynow-dynamic-v16';
+const CACHE_NAME = 'praynow-v17';
+const DYNAMIC_CACHE_NAME = 'praynow-dynamic-v17';
 const ASSETS_TO_CACHE = [
     '/',
     '/manifest.json',
@@ -44,7 +44,16 @@ self.addEventListener('fetch', (event) => {
             })
             .catch(async () => {
                 const cache = await caches.open(DYNAMIC_CACHE_NAME);
-                // Match all entries for the base URL path (ignoring volatile _rsc query hashes)
+
+                // 1. First attempt an exact standard match (ignoring headers like Next-Router-Prefetch)
+                // This successfully handles 99% of requests including JS chunks, CSS, Images, and fully exact page routes.
+                const exactMatch = await cache.match(event.request, { ignoreVary: true });
+                if (exactMatch) {
+                    return exactMatch;
+                }
+
+                // 2. If exact match fails (often because the Next.js `_rsc` build query hash rotated),
+                // scrape all matched base paths and manually identify the exact Content-Type payload
                 const cachedResponses = await cache.matchAll(event.request, { ignoreSearch: true });
 
                 if (cachedResponses && cachedResponses.length > 0) {
@@ -57,13 +66,14 @@ self.addEventListener('fetch', (event) => {
                         if (isRscRequest && contentType.includes('text/x-component')) {
                             return response; // Exact RSC match found!
                         }
-                        if (!isRscRequest && contentType.includes('text/html')) {
+                        if (event.request.mode === 'navigate' && contentType.includes('text/html')) {
                             return response; // Exact HTML match found!
                         }
                     }
 
-                    // If we only have an RSC payload but the browser wants HTML (hard reload), 
-                    // or vice versa, fall through to error rather than fatally locking the browser.
+                    // 3. Last ditch fallback: if it's a miscellaneous failed asset (like a generic font with query strings),
+                    // just return the first matched variation.
+                    return cachedResponses[0];
                 }
 
                 // Native hard navigation fallback: display nothing/let browser show offline dinosaur
