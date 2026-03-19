@@ -1,5 +1,5 @@
-const CACHE_NAME = 'praynow-v13';
-const DYNAMIC_CACHE_NAME = 'praynow-dynamic-v13';
+const CACHE_NAME = 'praynow-v14';
+const DYNAMIC_CACHE_NAME = 'praynow-dynamic-v14';
 const ASSETS_TO_CACHE = [
     '/',
     '/manifest.json',
@@ -37,25 +37,29 @@ self.addEventListener('fetch', (event) => {
     event.respondWith(
         fetch(event.request)
             .then((networkResponse) => {
-                // If we get a valid response, clone it and put it in dynamic cache
                 const responseToCache = networkResponse.clone();
                 caches.open(DYNAMIC_CACHE_NAME).then((cache) => {
-                    // Ignore caching certain browser extensions or non-http/https schemes
                     if (event.request.url.startsWith('http')) {
+                        // DO NOT CACHE Next.js prefetch payloads. They are only incomplete "layouts"
+                        // and will permanently freeze the router if served instead of a full page offline!
+                        if (event.request.headers.get('Next-Router-Prefetch') === '1') {
+                            return;
+                        }
                         cache.put(event.request, responseToCache);
                     }
                 });
                 return networkResponse;
             })
             .catch(() => {
-                // On network failure, try the cache. 
-                // ignoreVary is CRITICAL for Next.js App Router because it alters the `RSC` and `Next-Router-Prefetch` headers between prefetch and click. 
+                // ignoreVary is CRITICAL for Next.js App Router
                 return caches.match(event.request, { ignoreVary: true }).then((cachedResponse) => {
                     if (cachedResponse) {
                         return cachedResponse;
                     }
-                    // Let the request cleanly fail rather than serving the root page. 
-                    // Returning '/' to App Router causes hydration locks on alternate routes.
+                    if (event.request.headers.get('RSC') === '1') {
+                        // Return 504 to trigger App Router Error Boundary instead of silently freezing
+                        return new Response('Offline', { status: 504, statusText: "Offline" });
+                    }
                     return Response.error();
                 });
             })
