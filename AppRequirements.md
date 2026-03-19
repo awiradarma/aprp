@@ -40,7 +40,7 @@ Phase 3: Discovery and Global Mapping
 [ ] Build heatmap and marker clustering for global visualization.
 
 Phase 4: Notifications and Multi-Language
-[ ] Set up FCM Service Worker for web push notifications.
+[x] Set up FCM Service Worker for web push notifications.
 [ ] Implement optional email collection for "Magic Link" recovery and update alerts.
 [x] Integrate react-i18next for UI translations stored as JSON artifacts.
 [ ] Add AI-powered dynamic content translation for requests.
@@ -57,10 +57,10 @@ Phase 6: Support & Community
 [x] Update FAQ with "How to contact us" and comprehensive "Usage Guidelines" for the community.
 
 Phase 7: Personal Prayer Journaling
-[ ] Implement "Follow-up Notes" for prayers to track the journey from request to answer.
+[x] Implement "Follow-up Notes" for prayers to track the journey from request to answer.
 [ ] Add personal categories/tags for prayers (#Family, #Health, etc.) to allow filtering.
 [ ] Build a "Prayer Insights" dashboard in the My Prayers section showing answered rates and consistency streaks.
-[ ] Implement an "Export My Journal" feature (JSON/PDF) for anonymous data sovereignty.
+[x] Implement an "Export My Journal" feature (JSON/PDF) for anonymous data sovereignty.
 
 Phase 8: Progressive Web App & Offline Experience
 [x] Scaffolding: Implement `manifest.json` and basic Service Worker for installability.
