@@ -24,8 +24,8 @@ export default function OfflineIndicator() {
 
     return (
         <div className="fixed bottom-24 left-1/2 -translate-x-1/2 z-50">
-            <div className="bg-orange-600 text-white px-6 py-3 rounded-full shadow-2xl flex items-center gap-3 border-2 border-orange-400">
-                <span className="text-xl">📴</span>
+            <div className="bg-slate-800 text-white px-5 py-2.5 rounded-full shadow-2xl flex items-center gap-3 border-2 border-slate-600/50">
+                <span className="text-lg">☁️</span>
                 <div className="flex flex-col">
                     <span className="text-xs font-black uppercase tracking-widest leading-none">Working Offline</span>
                     <span className="text-[10px] opacity-80 font-medium">Changes will sync when online.</span>
