@@ -1,5 +1,5 @@
-const CACHE_NAME = 'praynow-v12';
-const DYNAMIC_CACHE_NAME = 'praynow-dynamic-v12';
+const CACHE_NAME = 'praynow-v13';
+const DYNAMIC_CACHE_NAME = 'praynow-dynamic-v13';
 const ASSETS_TO_CACHE = [
     '/',
     '/manifest.json',
@@ -49,8 +49,8 @@ self.addEventListener('fetch', (event) => {
             })
             .catch(() => {
                 // On network failure, try the cache. 
-                // ignoreSearch allows Next.js RSC requests (e.g., ?_rsc=...) to match the base cached route HTML
-                return caches.match(event.request, { ignoreSearch: true }).then((cachedResponse) => {
+                // ignoreVary is CRITICAL for Next.js App Router because it alters the `RSC` and `Next-Router-Prefetch` headers between prefetch and click. 
+                return caches.match(event.request, { ignoreVary: true }).then((cachedResponse) => {
                     if (cachedResponse) {
                         return cachedResponse;
                     }
