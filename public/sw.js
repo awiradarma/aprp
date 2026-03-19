@@ -1,5 +1,5 @@
-const CACHE_NAME = 'praynow-v11';
-const DYNAMIC_CACHE_NAME = 'praynow-dynamic-v11';
+const CACHE_NAME = 'praynow-v12';
+const DYNAMIC_CACHE_NAME = 'praynow-dynamic-v12';
 const ASSETS_TO_CACHE = [
     '/',
     '/manifest.json',
@@ -48,16 +48,15 @@ self.addEventListener('fetch', (event) => {
                 return networkResponse;
             })
             .catch(() => {
-                // On network failure, try the cache
-                return caches.match(event.request).then((cachedResponse) => {
+                // On network failure, try the cache. 
+                // ignoreSearch allows Next.js RSC requests (e.g., ?_rsc=...) to match the base cached route HTML
+                return caches.match(event.request, { ignoreSearch: true }).then((cachedResponse) => {
                     if (cachedResponse) {
                         return cachedResponse;
                     }
-                    // If it's a page navigation request and not found in cache, return the root page
-                    if (event.request.mode === 'navigate') {
-                        return caches.match('/');
-                    }
-                    return null;
+                    // Let the request cleanly fail rather than serving the root page. 
+                    // Returning '/' to App Router causes hydration locks on alternate routes.
+                    return Response.error();
                 });
             })
     );
