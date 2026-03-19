@@ -1,5 +1,5 @@
-const CACHE_NAME = 'praynow-v15';
-const DYNAMIC_CACHE_NAME = 'praynow-dynamic-v15';
+const CACHE_NAME = 'praynow-v16';
+const DYNAMIC_CACHE_NAME = 'praynow-dynamic-v16';
 const ASSETS_TO_CACHE = [
     '/',
     '/manifest.json',
@@ -29,10 +29,7 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-    // Only cache GET requests
-    if (event.request.method !== 'GET') {
-        return;
-    }
+    if (event.request.method !== 'GET') return;
 
     event.respondWith(
         fetch(event.request)
@@ -40,33 +37,37 @@ self.addEventListener('fetch', (event) => {
                 const responseToCache = networkResponse.clone();
                 caches.open(DYNAMIC_CACHE_NAME).then((cache) => {
                     if (event.request.url.startsWith('http')) {
-                        // DO NOT CACHE Next.js prefetch payloads. They are only incomplete "layouts"
-                        // and will permanently freeze the router if served instead of a full page offline!
-                        if (event.request.headers.get('Next-Router-Prefetch') === '1') {
-                            return;
-                        }
                         cache.put(event.request, responseToCache);
                     }
                 });
                 return networkResponse;
             })
-            .catch(() => {
-                // ignoreVary is CRITICAL for Next.js App Router
-                return caches.match(event.request, { ignoreVary: true }).then((cachedResponse) => {
-                    if (cachedResponse) {
-                        return cachedResponse;
+            .catch(async () => {
+                const cache = await caches.open(DYNAMIC_CACHE_NAME);
+                // Match all entries for the base URL path (ignoring volatile _rsc query hashes)
+                const cachedResponses = await cache.matchAll(event.request, { ignoreSearch: true });
+
+                if (cachedResponses && cachedResponses.length > 0) {
+                    const isRscRequest = event.request.headers.get('RSC') === '1';
+
+                    // Filter through the exact content-type to separate HTML app shells from JSON RSC payloads
+                    for (const response of cachedResponses) {
+                        const contentType = response.headers.get('content-type') || '';
+
+                        if (isRscRequest && contentType.includes('text/x-component')) {
+                            return response; // Exact RSC match found!
+                        }
+                        if (!isRscRequest && contentType.includes('text/html')) {
+                            return response; // Exact HTML match found!
+                        }
                     }
-                    // For hard navigations (e.g., refreshing or loading an unvisited route directly), 
-                    // serve the root HTML as an App Shell. Next.js will boot up and dynamically 
-                    // request the correct server components!
-                    if (event.request.mode === 'navigate') {
-                        return caches.match('/');
-                    }
-                    if (event.request.headers.get('RSC') === '1') {
-                        return new Response('Offline', { status: 504, statusText: "Offline" });
-                    }
-                    return Response.error();
-                });
+
+                    // If we only have an RSC payload but the browser wants HTML (hard reload), 
+                    // or vice versa, fall through to error rather than fatally locking the browser.
+                }
+
+                // Native hard navigation fallback: display nothing/let browser show offline dinosaur
+                return Response.error();
             })
     );
 });
