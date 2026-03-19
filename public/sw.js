@@ -1,5 +1,5 @@
-const CACHE_NAME = 'praynow-v19';
-const DYNAMIC_CACHE_NAME = 'praynow-dynamic-v19';
+const CACHE_NAME = 'praynow-v20';
+const DYNAMIC_CACHE_NAME = 'praynow-dynamic-v20';
 const ASSETS_TO_CACHE = [
     '/',
     '/manifest.json',
@@ -50,18 +50,17 @@ self.addEventListener('fetch', (event) => {
                 return networkResponse;
             })
             .catch(async () => {
-                const cache = await caches.open(DYNAMIC_CACHE_NAME);
-
-                // 1. First attempt an exact standard match (ignoring headers like Next-Router-Prefetch)
-                // This successfully handles 99% of requests including JS chunks, CSS, Images, and fully exact page routes.
-                const exactMatch = await cache.match(event.request, { ignoreVary: true });
+                // 1. First attempt an exact standard match globally across ALL caches
+                // This successfully handles static assets (like '/' or icons) alongside JS chunks and exact dynamic routes.
+                const exactMatch = await caches.match(event.request, { ignoreVary: true });
                 if (exactMatch) {
                     return exactMatch;
                 }
 
                 // 2. If exact match fails (often because the Next.js `_rsc` build query hash rotated),
                 // scrape all matched base paths and manually identify the exact Content-Type payload
-                const cachedResponses = await cache.matchAll(event.request, { ignoreSearch: true });
+                const dynamicCache = await caches.open(DYNAMIC_CACHE_NAME);
+                const cachedResponses = await dynamicCache.matchAll(event.request, { ignoreSearch: true });
 
                 if (cachedResponses && cachedResponses.length > 0) {
                     const isRscRequest = event.request.headers.get('RSC') === '1';
