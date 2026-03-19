@@ -1,5 +1,5 @@
-const CACHE_NAME = 'praynow-v18';
-const DYNAMIC_CACHE_NAME = 'praynow-dynamic-v18';
+const CACHE_NAME = 'praynow-v19';
+const DYNAMIC_CACHE_NAME = 'praynow-dynamic-v19';
 const ASSETS_TO_CACHE = [
     '/',
     '/manifest.json',
@@ -83,7 +83,38 @@ self.addEventListener('fetch', (event) => {
                     return cachedResponses[0];
                 }
 
-                // Native hard navigation fallback: display nothing/let browser show offline dinosaur
+                // RSC Navigations: Provide a clean 504 to let Next Router catch it instead of freezing memory
+                if (event.request.headers.get('RSC') === '1') {
+                    return new Response('Offline', { status: 504, statusText: "Offline" });
+                }
+
+                // Native hard navigation fallback: PWA Standalone hides the browser Dinosaur,
+                // resulting in a permanent blank white screen. We MUST return a synthetic HTML response!
+                if (event.request.mode === 'navigate') {
+                    return new Response(`
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                            <title>Offline - PrayNow</title>
+                            <style>
+                                body { font-family: system-ui, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; background: #f8fafc; color: #334155; }
+                                h1 { margin-bottom: 8px; font-weight: 900; }
+                                p { margin-bottom: 24px; color: #64748b; text-align: center; padding: 0 20px; line-height: 1.5;}
+                                button { background: #2563eb; color: white; border: none; padding: 12px 24px; border-radius: 9999px; font-weight: bold; font-size: 16px; cursor: pointer; box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2); }
+                            </style>
+                        </head>
+                        <body>
+                            <span style="font-size: 64px; margin-bottom: 16px;">☁️</span>
+                            <h1>You are offline</h1>
+                            <p>This page wasn't saved fully to your device. Please reconnect to the internet to view it.</p>
+                            <button onclick="window.location.href='/'">Go to Home Screen</button>
+                        </body>
+                        </html>
+                    `, { headers: { 'Content-Type': 'text/html' } });
+                }
+
                 return Response.error();
             })
     );
