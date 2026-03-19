@@ -1,5 +1,5 @@
-const CACHE_NAME = 'praynow-v14';
-const DYNAMIC_CACHE_NAME = 'praynow-dynamic-v14';
+const CACHE_NAME = 'praynow-v15';
+const DYNAMIC_CACHE_NAME = 'praynow-dynamic-v15';
 const ASSETS_TO_CACHE = [
     '/',
     '/manifest.json',
@@ -56,8 +56,13 @@ self.addEventListener('fetch', (event) => {
                     if (cachedResponse) {
                         return cachedResponse;
                     }
+                    // For hard navigations (e.g., refreshing or loading an unvisited route directly), 
+                    // serve the root HTML as an App Shell. Next.js will boot up and dynamically 
+                    // request the correct server components!
+                    if (event.request.mode === 'navigate') {
+                        return caches.match('/');
+                    }
                     if (event.request.headers.get('RSC') === '1') {
-                        // Return 504 to trigger App Router Error Boundary instead of silently freezing
                         return new Response('Offline', { status: 504, statusText: "Offline" });
                     }
                     return Response.error();
