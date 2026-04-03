@@ -20,6 +20,9 @@ export const metadata: Metadata = {
   title: "PrayNow | Anonymous Prayer",
   description: "Share your prayer — request, praise, or thanksgiving — anonymously with believers around the world.",
   manifest: "/manifest.json",
+  verification: {
+    google: "7Vre7fauvKAW_4h69ZJvRZYmtIoswEAD1VIgkycwuxA",
+  },
   icons: {
     apple: "/icon-192x192.png",
   },
