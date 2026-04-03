@@ -9,6 +9,64 @@ import IntercessionMap from "@/components/IntercessionMap";
 import { fetchIntercessionLocations } from "@/app/actions/intercessions";
 import { getTranslations, type Language } from "@/lib/i18n";
 import JournalTimeline from "@/components/JournalTimeline";
+import type { Metadata, ResolvingMetadata } from "next";
+
+export async function generateMetadata(
+    { params }: { params: Promise<{ id: string }> },
+    parent: ResolvingMetadata
+): Promise<Metadata> {
+    const { id } = await params;
+    
+    try {
+        const doc = await adminDb.collection("prayers").doc(id).get();
+        if (doc.exists) {
+            const data = doc.data() as any;
+            
+            // STRICT PRIVACY GUARD: Only inject metadata for 'public' prayers
+            if (data.visibility === 'public') {
+                const titleText = data.text.length > 60 ? data.text.slice(0, 56) + '...' : data.text;
+                const descText = data.text.length > 150 ? data.text.slice(0, 145) + '...' : data.text;
+
+                return {
+                    title: `PrayNow | "${titleText}"`,
+                    description: descText,
+                    openGraph: {
+                        title: `PrayNow | "${titleText}"`,
+                        description: descText,
+                        type: "article",
+                        url: `https://praynow.live/p/${id}`,
+                        siteName: "PrayNow",
+                        images: [
+                            {
+                                url: "/splash.png",
+                                width: 1024,
+                                height: 500,
+                            }
+                        ]
+                    },
+                    twitter: {
+                        card: "summary_large_image",
+                        title: `PrayNow | "${titleText}"`,
+                        description: descText,
+                        images: ["/splash.png"],
+                    }
+                };
+            }
+        }
+    } catch(err) {
+        // Fallback silently
+    }
+    
+    // Privacy Fallback: Generate generic text
+    // Works for 'private', 'unlisted', or 404/errored instances to guarantee safety.
+    return {
+        title: "PrayNow | Protected Prayer",
+        description: "This prayer is protected and unavailable for public preview sharing.",
+        openGraph: {
+             images: [{ url: "/splash.png" }]
+        }
+    };
+}
 
 export default async function PrayerPage({ params }: { params: Promise<{ id: string }> }) {
     const resolvedParams = await params;
